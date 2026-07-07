@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "595211962610",
+    "project_id": "nestory-12d20",
+    "storage_bucket": "nestory-12d20.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595211962610:android:d9a2b7742b4549f26d686b",
+        "android_client_info": {
+          "package_name": "com.zuzana.nestory"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3wHlO_VG1INFdTyxriE5bh_BplmA86JY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
