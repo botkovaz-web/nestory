@@ -1,4 +1,4 @@
-package com.example.nestory
+package com.zuzana.nestory
 
 import io.flutter.embedding.android.FlutterActivity
 
