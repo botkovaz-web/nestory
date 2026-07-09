@@ -43,10 +43,11 @@ Try `flutter pub outdated` for more information.
 Launching lib/main.dart on iPhone in debug mode...
 Automatically signing iOS for device deployment using specified development team in Xcode project: QPG4QKHKZ8
 Running Xcode build...                                          
-Xcode build done.                                           27,6s
-Installing and launching...                                        45,3s
+Xcode build done.                                           28,8s
+Installing and launching...                                        38,8s
+ This typically indicates that your device does not have a healthy Internet connection at the moment. The client will operate in offline mode until it is able to successfully connect to the backend.
 Target native_assets required define SdkRoot but it was not provided
-Syncing files to device iPhone...                                  179ms
+Syncing files to device iPhone...                                  193ms
 
 Flutter run key commands.
 r Hot reload. 🔥🔥🔥
@@ -56,7 +57,5 @@ d Detach (terminate "flutter run" but leave application running).
 c Clear the screen
 q Quit (terminate the application on the device).
 
-A Dart VM Service on iPhone is available at: http://127.0.0.1:50437/knkINRo1wpk=/
-The Flutter DevTools debugger and profiler on iPhone is available at: http://127.0.0.1:50437/knkINRo1wpk=/devtools/?uri=ws://127.0.0.1:50437/knkINRo1wpk=/ws
-
-Application finished.
+A Dart VM Service on iPhone is available at: http://127.0.0.1:62894/s37uZDLkDz0=/
+The Flutter DevTools debugger and profiler on iPhone is available at: http://127.0.0.1:62894/s37uZDLkDz0=/devtools/?uri=ws://127.0.0.1:62894/s37uZDLkDz0=/ws
