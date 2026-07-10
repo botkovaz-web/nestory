@@ -129,6 +129,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
         elevation: 0,
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'material_fab_unique',
         onPressed: () => _showAddMaterialDialog(),
         backgroundColor: AppColors.accent,
         child: const Icon(Icons.add, color: Colors.white),

@@ -113,6 +113,7 @@ class _ToolsScreenState extends State<ToolsScreen> {
         elevation: 0,
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'tools_fab_unique', // Unikátny tag pre Pomôcky
         onPressed: () => _showAddToolDialog(),
         backgroundColor: AppColors.accent,
         child: const Icon(Icons.add, color: Colors.white),

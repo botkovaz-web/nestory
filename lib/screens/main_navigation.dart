@@ -15,14 +15,6 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
 
-  // Zoznam obrazoviek pre navigáciu
-  final List<Widget> _screens = [
-    const HomeScreen(),
-    const OrderScreen(),
-    const MaterialScreen(),
-    const ToolsScreen(),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -31,6 +23,14 @@ class _MainNavigationState extends State<MainNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    // Zoznam obrazoviek definujeme vnútri buildu, aby sme mohli predať callback
+    final List<Widget> _screens = [
+      HomeScreen(onNavigate: _onItemTapped), // Odovzdáme funkciu na prepínanie
+      const OrderScreen(),
+      const MaterialScreen(),
+      const ToolsScreen(),
+    ];
+
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,

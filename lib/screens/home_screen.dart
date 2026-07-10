@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../app_colors.dart';
-import 'material_screen.dart';
-import 'tools_screen.dart';
-import 'order_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final Function(int) onNavigate; // Pridaný callback
+
+  const HomeScreen({super.key, required this.onNavigate});
 
   String _getRandomNestiMessage(String name, int orderCount) {
     final List<String> messages = [
@@ -113,7 +112,6 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 24),
-                    // Dashboard grid filling the rest of the screen
                     Expanded(
                       child: Column(
                         children: [
@@ -124,14 +122,14 @@ class HomeScreen extends StatelessWidget {
                                   context,
                                   'Materiál',
                                   'assets/nesti_organizing.png',
-                                  () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MaterialScreen())),
+                                  () => onNavigate(2), // Prepne na Materiál
                                 )),
                                 const SizedBox(width: 16),
                                 Expanded(child: _buildDashboardCard(
                                   context,
                                   'Pomôcky',
                                   'assets/nesti_watching.png',
-                                  () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ToolsScreen())),
+                                  () => onNavigate(3), // Prepne na Pomôcky
                                 )),
                               ],
                             ),
@@ -144,14 +142,14 @@ class HomeScreen extends StatelessWidget {
                                   context,
                                   'Objednávky',
                                   'assets/nesti_packing.png',
-                                  () => Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderScreen())),
+                                  () => onNavigate(1), // Prepne na Objednávky
                                 )),
                                 const SizedBox(width: 16),
                                 Expanded(child: _buildDashboardCard(
                                   context,
                                   'Produkty',
                                   'assets/nesti_in_basket.png',
-                                  () {},
+                                  () {}, // Tu zatiaľ nič nemáš v menu
                                 )),
                               ],
                             ),

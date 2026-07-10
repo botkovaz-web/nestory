@@ -132,6 +132,7 @@ class _OrderScreenState extends State<OrderScreen> {
         elevation: 0,
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'order_fab_unique',
         onPressed: () => _showAddOrderDialog(),
         backgroundColor: AppColors.accent,
         child: const Icon(Icons.add, color: Colors.white),
