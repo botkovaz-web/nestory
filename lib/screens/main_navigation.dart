@@ -4,6 +4,7 @@ import 'home_screen.dart';
 import 'order_screen.dart';
 import 'material_screen.dart';
 import 'tools_screen.dart';
+import 'project_screen.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -23,12 +24,13 @@ class _MainNavigationState extends State<MainNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    // Zoznam obrazoviek definujeme vnútri buildu, aby sme mohli predať callback
     final List<Widget> _screens = [
-      HomeScreen(onNavigate: _onItemTapped), // Odovzdáme funkciu na prepínanie
-      const OrderScreen(),
-      const MaterialScreen(),
-      const ToolsScreen(),
+      HomeScreen(onNavigate: _onItemTapped), // 0
+      const MaterialScreen(),                 // 1
+      const ToolsScreen(),                    // 2
+      const ProjectScreen(),                  // 3
+      const OrderScreen(),                    // 4
+      const Center(child: Text('Štatistiky (Pripravujeme)')), // 5 (Placeholder)
     ];
 
     return Scaffold(
@@ -53,16 +55,13 @@ class _MainNavigationState extends State<MainNavigation> {
           selectedItemColor: AppColors.accent,
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
+          selectedFontSize: 10,
+          unselectedFontSize: 9,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard_outlined),
               activeIcon: Icon(Icons.dashboard),
               label: 'Domov',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_bag_outlined),
-              activeIcon: Icon(Icons.shopping_bag),
-              label: 'Objednávky',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.inventory_2_outlined),
@@ -73,6 +72,21 @@ class _MainNavigationState extends State<MainNavigation> {
               icon: Icon(Icons.build_outlined),
               activeIcon: Icon(Icons.build),
               label: 'Pomôcky',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.palette_outlined),
+              activeIcon: Icon(Icons.palette),
+              label: 'Projekty',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_bag_outlined),
+              activeIcon: Icon(Icons.shopping_bag),
+              label: 'Objednávky',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.bar_chart_outlined),
+              activeIcon: Icon(Icons.bar_chart),
+              label: 'Štatistiky',
             ),
           ],
         ),

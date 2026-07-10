@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../app_colors.dart';
 
 class HomeScreen extends StatelessWidget {
-  final Function(int) onNavigate; // Pridaný callback
+  final Function(int) onNavigate;
 
   const HomeScreen({super.key, required this.onNavigate});
 
@@ -93,6 +93,7 @@ class HomeScreen extends StatelessWidget {
                                     topRight: Radius.circular(15),
                                     bottomLeft: Radius.circular(15),
                                     bottomRight: Radius.circular(15),
+                                    topLeft: Radius.circular(0),
                                   ),
                                 ),
                                 child: Text(
@@ -115,6 +116,7 @@ class HomeScreen extends StatelessWidget {
                     Expanded(
                       child: Column(
                         children: [
+                          // 1. Rad: Materiál a Pomôcky
                           Expanded(
                             child: Row(
                               children: [
@@ -122,39 +124,41 @@ class HomeScreen extends StatelessWidget {
                                   context,
                                   'Materiál',
                                   'assets/nesti_organizing.png',
-                                  () => onNavigate(2), // Prepne na Materiál
+                                  () => onNavigate(1), 
                                 )),
                                 const SizedBox(width: 16),
                                 Expanded(child: _buildDashboardCard(
                                   context,
                                   'Pomôcky',
                                   'assets/nesti_watching.png',
-                                  () => onNavigate(3), // Prepne na Pomôcky
+                                  () => onNavigate(2), 
                                 )),
                               ],
                             ),
                           ),
                           const SizedBox(height: 16),
+                          // 2. Rad: Projekty a Objednávky
                           Expanded(
                             child: Row(
                               children: [
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  'Objednávky',
-                                  'assets/nesti_packing.png',
-                                  () => onNavigate(1), // Prepne na Objednávky
+                                  'Projekty',
+                                  'assets/nesti_in_basket.png',
+                                  () => onNavigate(3), 
                                 )),
                                 const SizedBox(width: 16),
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  'Produkty',
-                                  'assets/nesti_in_basket.png',
-                                  () {}, // Tu zatiaľ nič nemáš v menu
+                                  'Objednávky',
+                                  'assets/nesti_packing.png',
+                                  () => onNavigate(4), 
                                 )),
                               ],
                             ),
                           ),
                           const SizedBox(height: 16),
+                          // 3. Rad: Plánovač a Štatistiky
                           Expanded(
                             child: Row(
                               children: [
@@ -162,14 +166,14 @@ class HomeScreen extends StatelessWidget {
                                   context,
                                   'Plánovač',
                                   'assets/nesti_planning.png',
-                                  () {},
+                                  () {}, // Plánovač zatiaľ nie je v menu
                                 )),
                                 const SizedBox(width: 16),
                                 Expanded(child: _buildDashboardCard(
                                   context,
                                   'Štatistiky',
                                   'assets/icon_grow.png',
-                                  () {},
+                                  () => onNavigate(5),
                                 )),
                               ],
                             ),
