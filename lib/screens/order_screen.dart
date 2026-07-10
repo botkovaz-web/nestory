@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import '../app_colors.dart';
 import '../models/order_model.dart';
+import '../l10n/app_localizations.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
@@ -15,7 +16,19 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   final user = FirebaseAuth.instance.currentUser;
 
+  String _getLocalizedStatus(BuildContext context, String status) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (status) {
+      case 'V poradí': return l10n.statusInQueue;
+      case 'V procese': return l10n.statusInProgress;
+      case 'Hotovo': return l10n.statusDone;
+      case 'Odoslané': return l10n.statusSent;
+      default: return status;
+    }
+  }
+
   void _showAddOrderDialog([OrderModel? order]) async {
+    final l10n = AppLocalizations.of(context)!;
     final customerController = TextEditingController(text: order != null ? order.customerName : '');
     final productController = TextEditingController(text: order != null ? order.productName : '');
     final priceController = TextEditingController(text: order != null ? order.price.toString() : '');
@@ -27,32 +40,32 @@ class _OrderScreenState extends State<OrderScreen> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: Text(order == null ? 'Nová objednávka' : 'Upraviť objednávku'),
+          title: Text(order == null ? '${l10n.add} ${l10n.orders.toLowerCase()}' : '${l10n.edit} ${l10n.orders.toLowerCase()}'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
                   controller: customerController,
-                  decoration: const InputDecoration(labelText: 'Meno zákazníka'),
+                  decoration: InputDecoration(labelText: l10n.customerName),
                 ),
                 const SizedBox(height: 16),
                 TextField(
                   controller: productController,
-                  decoration: const InputDecoration(labelText: 'Produkt / Popis'),
+                  decoration: InputDecoration(labelText: l10n.productDescription),
                 ),
                 const SizedBox(height: 16),
                 TextField(
                   controller: priceController,
-                  decoration: const InputDecoration(labelText: 'Cena (€)'),
+                  decoration: InputDecoration(labelText: '${l10n.price} (€)'),
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 16),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(selectedDate == null 
-                    ? 'Vybrať termín' 
-                    : 'Termín: ${DateFormat('dd.MM.yyyy').format(selectedDate!)}'),
+                    ? l10n.deadline 
+                    : '${l10n.deadline}: ${DateFormat('dd.MM.yyyy').format(selectedDate!)}'),
                   trailing: const Icon(Icons.calendar_today),
                   onTap: () async {
                     DateTime? picked = await showDatePicker(
@@ -68,14 +81,17 @@ class _OrderScreenState extends State<OrderScreen> {
                 ),
                 DropdownButtonFormField<String>(
                   value: status,
-                  decoration: const InputDecoration(labelText: 'Stav'),
-                  items: ['V poradí', 'V procese', 'Hotovo', 'Odoslané']
-                      .map((s) => DropdownMenuItem(value: s, child: Text(s)))
-                      .toList(),
+                  decoration: InputDecoration(labelText: l10n.status),
+                  items: [
+                    DropdownMenuItem(value: 'V poradí', child: Text(l10n.statusInQueue)),
+                    DropdownMenuItem(value: 'V procese', child: Text(l10n.statusInProgress)),
+                    DropdownMenuItem(value: 'Hotovo', child: Text(l10n.statusDone)),
+                    DropdownMenuItem(value: 'Odoslané', child: Text(l10n.statusSent)),
+                  ],
                   onChanged: (val) => status = val!,
                 ),
                 SwitchListTile(
-                  title: const Text('Zaplatené'),
+                  title: Text(l10n.paid),
                   value: isPaid,
                   onChanged: (val) => setDialogState(() => isPaid = val),
                 ),
@@ -83,7 +99,7 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Zrušiť')),
+            TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
             ElevatedButton(
               onPressed: () async {
                 if (customerController.text.isEmpty) return;
@@ -115,7 +131,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 if (mounted) Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(minimumSize: const Size(100, 40)),
-              child: const Text('Uložiť'),
+              child: Text(l10n.save),
             ),
           ],
         ),
@@ -125,9 +141,10 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Objednávky'),
+        title: Text(l10n.orders),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -156,7 +173,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 children: [
                   Image.asset('assets/nesti_packing.png', height: 150),
                   const SizedBox(height: 16),
-                  const Text('Žiadne aktívne objednávky.', style: TextStyle(color: Colors.grey)),
+                  Text(l10n.noOrders, style: const TextStyle(color: Colors.grey)),
                 ],
               ),
             );
@@ -186,7 +203,7 @@ class _OrderScreenState extends State<OrderScreen> {
                     children: [
                       Text(order.productName),
                       if (order.deadline != null)
-                        Text('Termín: ${DateFormat('dd.MM.yyyy').format(order.deadline!)}', 
+                        Text('${l10n.deadline}: ${DateFormat('dd.MM.yyyy').format(order.deadline!)}', 
                              style: const TextStyle(fontSize: 12, color: Colors.redAccent)),
                     ],
                   ),
@@ -202,7 +219,7 @@ class _OrderScreenState extends State<OrderScreen> {
                         children: [
                           if (order.isPaid) const Icon(Icons.check_circle, size: 14, color: Colors.green),
                           const SizedBox(width: 4),
-                          Text(order.status, style: TextStyle(color: statusColor, fontWeight: FontWeight.bold, fontSize: 12)),
+                          Text(_getLocalizedStatus(context, order.status), style: TextStyle(color: statusColor, fontWeight: FontWeight.bold, fontSize: 12)),
                         ],
                       ),
                     ],
@@ -212,9 +229,9 @@ class _OrderScreenState extends State<OrderScreen> {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: const Text('Vymazať objednávku?'),
+                        title: Text(l10n.deleteConfirmation),
                         actions: [
-                          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Zrušiť')),
+                          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.no)),
                           TextButton(
                             onPressed: () {
                               FirebaseFirestore.instance
@@ -225,7 +242,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                   .delete();
                               Navigator.pop(context);
                             },
-                            child: const Text('Vymazať', style: TextStyle(color: Colors.red)),
+                            child: Text(l10n.yes, style: const TextStyle(color: Colors.red)),
                           ),
                         ],
                       ),

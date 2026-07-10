@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../app_colors.dart';
 import 'register_screen.dart';
+import '../l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,10 +17,11 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
 
   Future<void> _login() async {
+    final l10n = AppLocalizations.of(context)!;
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Zadajte email a heslo')),
+          const SnackBar(content: Text('Email and password required')), // Basic fallback
         );
       }
       return;
@@ -34,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } on FirebaseAuthException catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.message ?? 'Chyba pri prihlásení')),
+          SnackBar(content: Text(e.message ?? 'Login failed')),
         );
       }
     } finally {
@@ -44,9 +46,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Prihlásenie'),
+        title: Text(l10n.login),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -74,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: 300,
                 child: TextField(
                   controller: _passwordController,
-                  decoration: const InputDecoration(labelText: 'Heslo'),
+                  decoration: const InputDecoration(labelText: 'Password'),
                   obscureText: true,
                 ),
               ),
@@ -83,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
                       onPressed: _login,
-                      child: const Text('Prihlásiť sa'),
+                      child: Text(l10n.login),
                     ),
               const SizedBox(height: 16),
               TextButton(
@@ -93,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     MaterialPageRoute(builder: (context) => const RegisterScreen()),
                   );
                 },
-                child: const Text('Nemáte účet? Zaregistrujte sa'),
+                child: const Text('Don\'t have an account? Register'),
               ),
             ],
           ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/app_localizations.dart';
 import 'app_colors.dart';
 import 'screens/main_navigation.dart';
 import 'screens/login_screen.dart';
@@ -30,7 +32,7 @@ class NestoryApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.background,
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: Colors.white.withAlpha(128), // Nahradené za withAlpha pre kompatibilitu
+          fillColor: Colors.white.withAlpha(128),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
@@ -57,6 +59,16 @@ class NestoryApp extends StatelessWidget {
           ),
         ),
       ),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('sk'),
+        Locale('en'),
+      ],
       home: const AuthWrapper(),
     );
   }

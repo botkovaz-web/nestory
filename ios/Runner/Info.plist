@@ -49,6 +49,10 @@
 	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Aplikácia potrebuje prístup k fotoaparátu, aby ste mohli fotiť svoje projekty.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Aplikácia potrebuje prístup k fotogalérii, aby ste mohli pridávať fotky k projektom.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

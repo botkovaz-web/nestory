@@ -3,26 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../app_colors.dart';
+import '../l10n/app_localizations.dart';
 
 class HomeScreen extends StatelessWidget {
   final Function(int) onNavigate;
 
   const HomeScreen({super.key, required this.onNavigate});
 
-  String _getRandomNestiMessage(String name, int orderCount) {
+  String _getRandomNestiMessage(BuildContext context, String name, int orderCount) {
+    final l10n = AppLocalizations.of(context)!;
     final List<String> messages = [
-      'Dnes je skvelý deň na tvorenie, $name!',
-      'Nezabudla si si zapísať tie nové korálky?',
-      'Nesti na teba dohliada, pôjde ti to od ruky.',
-      'Káva v jednej ruke, ihla v druhej. Ideš!',
-      'Tvoje výrobky robia svet krajším. Fakt.',
-      'Nesti hovorí: Oddych je tiež dôležitý!',
+      l10n.nestiMessage1(name),
+      l10n.nestiMessage2,
+      l10n.nestiMessage3,
+      l10n.nestiMessage4,
+      l10n.nestiMessage5,
+      l10n.nestiMessage6,
     ];
 
     if (orderCount > 0) {
-      messages.add('Máš $orderCount objednávky v poradí. Nesti drží palce!');
+      messages.add(l10n.nestiOrdersMessage(orderCount));
     } else {
-      messages.add('Všetko hotové? Nesti navrhuje niečo nové vytvoriť!');
+      messages.add(l10n.nestiNoOrdersMessage);
     }
 
     return messages[Random().nextInt(messages.length)];
@@ -31,10 +33,11 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nestory'),
+        title: Text(l10n.appTitle),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
@@ -47,9 +50,9 @@ class HomeScreen extends StatelessWidget {
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance.collection('users').doc(user?.uid).snapshots(),
         builder: (context, userSnapshot) {
-          String name = "Tvorca";
+          String name = l10n.creator;
           if (userSnapshot.hasData && userSnapshot.data!.exists) {
-            name = (userSnapshot.data!.data() as Map<String, dynamic>)['name'] ?? "Tvorca";
+            name = (userSnapshot.data!.data() as Map<String, dynamic>)['name'] ?? l10n.creator;
           }
 
           return StreamBuilder<QuerySnapshot>(
@@ -61,7 +64,7 @@ class HomeScreen extends StatelessWidget {
                 .snapshots(),
             builder: (context, ordersSnapshot) {
               int activeOrders = ordersSnapshot.hasData ? ordersSnapshot.data!.docs.length : 0;
-              String nestiMessage = _getRandomNestiMessage(name, activeOrders);
+              String nestiMessage = _getRandomNestiMessage(context, name, activeOrders);
 
               return Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -77,7 +80,7 @@ class HomeScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Ahoj, $name!',
+                                '${l10n.welcome}, $name!',
                                 style: const TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
@@ -116,20 +119,19 @@ class HomeScreen extends StatelessWidget {
                     Expanded(
                       child: Column(
                         children: [
-                          // 1. Rad: Materiál a Pomôcky
                           Expanded(
                             child: Row(
                               children: [
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  'Materiál',
+                                  l10n.material,
                                   'assets/nesti_organizing.png',
                                   () => onNavigate(1), 
                                 )),
                                 const SizedBox(width: 16),
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  'Pomôcky',
+                                  l10n.tools,
                                   'assets/nesti_watching.png',
                                   () => onNavigate(2), 
                                 )),
@@ -137,20 +139,19 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          // 2. Rad: Projekty a Objednávky
                           Expanded(
                             child: Row(
                               children: [
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  'Projekty',
+                                  l10n.projects,
                                   'assets/nesti_in_basket.png',
                                   () => onNavigate(3), 
                                 )),
                                 const SizedBox(width: 16),
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  'Objednávky',
+                                  l10n.orders,
                                   'assets/nesti_packing.png',
                                   () => onNavigate(4), 
                                 )),
@@ -158,20 +159,19 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          // 3. Rad: Plánovač a Štatistiky
                           Expanded(
                             child: Row(
                               children: [
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  'Plánovač',
+                                  l10n.planner,
                                   'assets/nesti_planning.png',
-                                  () {}, // Plánovač zatiaľ nie je v menu
+                                  () => onNavigate(5),
                                 )),
                                 const SizedBox(width: 16),
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  'Štatistiky',
+                                  l10n.stats,
                                   'assets/icon_grow.png',
                                   () => onNavigate(5),
                                 )),

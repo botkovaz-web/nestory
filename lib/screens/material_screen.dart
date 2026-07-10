@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../app_colors.dart';
 import '../models/material_model.dart';
+import '../l10n/app_localizations.dart';
 
 class MaterialScreen extends StatefulWidget {
   const MaterialScreen({super.key});
@@ -14,9 +15,34 @@ class MaterialScreen extends StatefulWidget {
 class _MaterialScreenState extends State<MaterialScreen> {
   final user = FirebaseAuth.instance.currentUser;
 
-  final List<String> _units = ['ks', 'g', 'kg', 'm', 'klbka', 'hárky', 'balenia'];
+  String _getLocalizedCategory(BuildContext context, String category) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (category) {
+      case 'Priadze': return l10n.catYarns;
+      case 'Korálky': return l10n.catBeads;
+      case 'Papiere': return l10n.catPapers;
+      case 'Látky': return l10n.catFabrics;
+      case 'Iné': return l10n.catOther;
+      default: return category;
+    }
+  }
+
+  String _getLocalizedUnit(BuildContext context, String unit) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (unit) {
+      case 'ks': return l10n.unitPcs;
+      case 'g': return l10n.unitGrams;
+      case 'kg': return l10n.unitKg;
+      case 'm': return l10n.unitMeters;
+      case 'klbka': return l10n.unitBalls;
+      case 'hárky': return l10n.unitSheets;
+      case 'balenia': return l10n.unitPacks;
+      default: return unit;
+    }
+  }
 
   void _showAddMaterialDialog([MaterialModel? material]) {
+    final l10n = AppLocalizations.of(context)!;
     final nameController = TextEditingController(text: material != null ? material.name : '');
     final quantityController = TextEditingController(text: material != null ? material.quantity.toString() : '');
     final locationController = TextEditingController(text: material != null ? material.location : '');
@@ -26,22 +52,26 @@ class _MaterialScreenState extends State<MaterialScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(material == null ? 'Pridať materiál' : 'Upraviť materiál'),
+        title: Text(material == null ? '${l10n.add} ${l10n.material.toLowerCase()}' : '${l10n.edit} ${l10n.material.toLowerCase()}'),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(labelText: 'Názov (napr. Biela vlna)'),
+                decoration: InputDecoration(labelText: l10n.name),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 value: category,
-                decoration: const InputDecoration(labelText: 'Kategória'),
-                items: ['Priadze', 'Korálky', 'Papiere', 'Látky', 'Iné']
-                    .map((cat) => DropdownMenuItem(value: cat, child: Text(cat)))
-                    .toList(),
+                decoration: InputDecoration(labelText: l10n.category),
+                items: [
+                  DropdownMenuItem(value: 'Priadze', child: Text(l10n.catYarns)),
+                  DropdownMenuItem(value: 'Korálky', child: Text(l10n.catBeads)),
+                  DropdownMenuItem(value: 'Papiere', child: Text(l10n.catPapers)),
+                  DropdownMenuItem(value: 'Látky', child: Text(l10n.catFabrics)),
+                  DropdownMenuItem(value: 'Iné', child: Text(l10n.catOther)),
+                ],
                 onChanged: (val) => category = val!,
               ),
               const SizedBox(height: 16),
@@ -51,7 +81,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
                     flex: 2,
                     child: TextField(
                       controller: quantityController,
-                      decoration: const InputDecoration(labelText: 'Množstvo'),
+                      decoration: InputDecoration(labelText: l10n.quantity),
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     ),
                   ),
@@ -61,13 +91,19 @@ class _MaterialScreenState extends State<MaterialScreen> {
                     child: DropdownButtonFormField<String>(
                       isExpanded: true,
                       value: unit,
-                      decoration: const InputDecoration(
-                        labelText: 'Jednotka',
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      decoration: InputDecoration(
+                        labelText: l10n.unit,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       ),
-                      items: _units
-                          .map((u) => DropdownMenuItem(value: u, child: Text(u, style: const TextStyle(fontSize: 14))))
-                          .toList(),
+                      items: [
+                        DropdownMenuItem(value: 'ks', child: Text(l10n.unitPcs)),
+                        DropdownMenuItem(value: 'g', child: Text(l10n.unitGrams)),
+                        DropdownMenuItem(value: 'kg', child: Text(l10n.unitKg)),
+                        DropdownMenuItem(value: 'm', child: Text(l10n.unitMeters)),
+                        DropdownMenuItem(value: 'klbka', child: Text(l10n.unitBalls)),
+                        DropdownMenuItem(value: 'hárky', child: Text(l10n.unitSheets)),
+                        DropdownMenuItem(value: 'balenia', child: Text(l10n.unitPacks)),
+                      ],
                       onChanged: (val) => unit = val!,
                     ),
                   ),
@@ -76,13 +112,13 @@ class _MaterialScreenState extends State<MaterialScreen> {
               const SizedBox(height: 16),
               TextField(
                 controller: locationController,
-                decoration: const InputDecoration(labelText: 'Umiestnenie (napr. Polica A1)'),
+                decoration: InputDecoration(labelText: l10n.location),
               ),
             ],
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Zrušiť')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
           ElevatedButton(
             onPressed: () async {
               if (nameController.text.trim().isEmpty) return;
@@ -113,7 +149,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
               if (mounted) Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(minimumSize: const Size(100, 40)),
-            child: const Text('Uložiť'),
+            child: Text(l10n.save),
           ),
         ],
       ),
@@ -122,9 +158,10 @@ class _MaterialScreenState extends State<MaterialScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Materiál'),
+        title: Text(l10n.material),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -153,8 +190,8 @@ class _MaterialScreenState extends State<MaterialScreen> {
                 children: [
                   Image.asset('assets/nesti_watching.png', height: 150),
                   const SizedBox(height: 16),
-                  const Text('Zatiaľ tu nemáš žiadny materiál.',
-                      style: TextStyle(color: Colors.grey)),
+                  Text(l10n.noMaterial,
+                      style: const TextStyle(color: Colors.grey)),
                 ],
               ),
             );
@@ -174,7 +211,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(material.category),
+                      Text(_getLocalizedCategory(context, material.category)),
                       if (material.location.isNotEmpty)
                         Text('📍 ${material.location}', style: const TextStyle(fontSize: 12, color: Colors.blueGrey)),
                     ],
@@ -183,7 +220,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '${material.quantity} ${material.unit}',
+                        '${material.quantity} ${_getLocalizedUnit(context, material.unit)}',
                         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.accent),
                       ),
                       const SizedBox(width: 4),

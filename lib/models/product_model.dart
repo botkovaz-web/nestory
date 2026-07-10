@@ -1,45 +1,45 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProjectModel {
+class ProductModel {
   final String id;
   final String name;
   final String description;
-  final List<String> requiredMaterials;
-  final List<String> requiredTools;
-  final String status; // 'V pláne', 'Príprava', 'Vo výrobe', 'Hotovo'
-  final bool isForOrder;
-  final String? orderId;
-  final DateTime? deadline;
+  final double price;
   final String? imageUrl;
+  final List<String> requiredMaterials; // Zoznam ID materiálov alebo názvov
+  final List<String> requiredTools; // Zoznam ID pomôcok
+  final String? orderId; // Prepojenie na konkrétnu objednávku
+  final String status; // 'Nápad', 'Príprava', 'Vo výrobe', 'Hotovo'
+  final DateTime? deadline;
   final DateTime? updatedAt;
 
-  ProjectModel({
+  ProductModel({
     required this.id,
     required this.name,
     this.description = '',
+    this.price = 0.0,
+    this.imageUrl,
     this.requiredMaterials = const [],
     this.requiredTools = const [],
-    required this.status,
-    this.isForOrder = false,
     this.orderId,
+    required this.status,
     this.deadline,
-    this.imageUrl,
     this.updatedAt,
   });
 
-  factory ProjectModel.fromFirestore(DocumentSnapshot doc) {
+  factory ProductModel.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map<String, dynamic>;
-    return ProjectModel(
+    return ProductModel(
       id: doc.id,
       name: data['name'] ?? '',
       description: data['description'] ?? '',
+      price: (data['price'] ?? 0).toDouble(),
+      imageUrl: data['imageUrl'],
       requiredMaterials: List<String>.from(data['requiredMaterials'] ?? []),
       requiredTools: List<String>.from(data['requiredTools'] ?? []),
-      status: data['status'] ?? 'V pláne',
-      isForOrder: data['isForOrder'] ?? false,
       orderId: data['orderId'],
+      status: data['status'] ?? 'Nápad',
       deadline: (data['deadline'] as Timestamp?)?.toDate(),
-      imageUrl: data['imageUrl'],
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate(),
     );
   }
@@ -48,14 +48,14 @@ class ProjectModel {
     return {
       'name': name,
       'description': description,
+      'price': price,
+      'imageUrl': imageUrl,
       'requiredMaterials': requiredMaterials,
       'requiredTools': requiredTools,
-      'status': status,
-      'isForOrder': isForOrder,
       'orderId': orderId,
+      'status': status,
       'deadline': deadline != null ? Timestamp.fromDate(deadline!) : null,
-      'imageUrl': imageUrl,
-      'updatedAt': FieldValue.serverTimestamp(),
+      'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : FieldValue.serverTimestamp(),
     };
   }
 }

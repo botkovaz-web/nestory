@@ -5,6 +5,8 @@ import 'order_screen.dart';
 import 'material_screen.dart';
 import 'tools_screen.dart';
 import 'project_screen.dart';
+import 'planner_screen.dart';
+import '../l10n/app_localizations.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -24,13 +26,15 @@ class _MainNavigationState extends State<MainNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     final List<Widget> _screens = [
       HomeScreen(onNavigate: _onItemTapped), // 0
       const MaterialScreen(),                 // 1
       const ToolsScreen(),                    // 2
       const ProjectScreen(),                  // 3
       const OrderScreen(),                    // 4
-      const Center(child: Text('Štatistiky (Pripravujeme)')), // 5 (Placeholder)
+      const PlannerScreen(),                  // 5
     ];
 
     return Scaffold(
@@ -57,36 +61,36 @@ class _MainNavigationState extends State<MainNavigation> {
           showUnselectedLabels: true,
           selectedFontSize: 10,
           unselectedFontSize: 9,
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard_outlined),
-              activeIcon: Icon(Icons.dashboard),
-              label: 'Domov',
+              icon: const Icon(Icons.dashboard_outlined),
+              activeIcon: const Icon(Icons.dashboard),
+              label: l10n.home,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.inventory_2_outlined),
-              activeIcon: Icon(Icons.inventory_2),
-              label: 'Materiál',
+              icon: const Icon(Icons.inventory_2_outlined),
+              activeIcon: const Icon(Icons.inventory_2),
+              label: l10n.material,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.build_outlined),
-              activeIcon: Icon(Icons.build),
-              label: 'Pomôcky',
+              icon: const Icon(Icons.build_outlined),
+              activeIcon: const Icon(Icons.build),
+              label: l10n.tools,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.palette_outlined),
-              activeIcon: Icon(Icons.palette),
-              label: 'Projekty',
+              icon: const Icon(Icons.palette_outlined),
+              activeIcon: const Icon(Icons.palette),
+              label: l10n.projects,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_bag_outlined),
-              activeIcon: Icon(Icons.shopping_bag),
-              label: 'Objednávky',
+              icon: const Icon(Icons.shopping_bag_outlined),
+              activeIcon: const Icon(Icons.shopping_bag),
+              label: l10n.orders,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart_outlined),
-              activeIcon: Icon(Icons.bar_chart),
-              label: 'Štatistiky',
+              icon: const Icon(Icons.calendar_today_outlined),
+              activeIcon: const Icon(Icons.calendar_today),
+              label: l10n.planner,
             ),
           ],
         ),

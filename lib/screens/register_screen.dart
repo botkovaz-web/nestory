@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../app_colors.dart';
+import '../l10n/app_localizations.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -17,10 +18,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isLoading = false;
 
   Future<void> _register() async {
+    final l10n = AppLocalizations.of(context)!;
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty || _nameController.text.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Prosím, vyplňte všetky údaje')),
+          const SnackBar(content: Text('Please fill in all fields')),
         );
       }
       return;
@@ -28,13 +30,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     setState(() => _isLoading = true);
     try {
-      // 1. Vytvorenie používateľa v Authentication
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
 
-      // 2. Uloženie dodatočných údajov do Firestore
       await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
         'uid': userCredential.user!.uid,
         'name': _nameController.text.trim(),
@@ -43,15 +43,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
 
       if (mounted) {
-        Navigator.pop(context); // Návrat na login po úspešnej registrácii
+        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Účet bol úspešne vytvorený!')),
+          const SnackBar(content: Text('Account created successfully!')),
         );
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.message ?? 'Chyba pri registrácii')),
+          SnackBar(content: Text(e.message ?? 'Registration failed')),
         );
       }
     } finally {
@@ -61,9 +61,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registrácia'),
+        title: Text(l10n.register),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -73,16 +74,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Vytvorte si účet',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              Text(
+                l10n.register,
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 32),
               SizedBox(
                 width: 300,
                 child: TextField(
                   controller: _nameController,
-                  decoration: const InputDecoration(labelText: 'Meno'),
+                  decoration: const InputDecoration(labelText: 'Name'),
                 ),
               ),
               const SizedBox(height: 16),
@@ -99,7 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 width: 300,
                 child: TextField(
                   controller: _passwordController,
-                  decoration: const InputDecoration(labelText: 'Heslo'),
+                  decoration: const InputDecoration(labelText: 'Password'),
                   obscureText: true,
                 ),
               ),
@@ -108,12 +109,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
                       onPressed: _register,
-                      child: const Text('Zaregistrovať sa'),
+                      child: Text(l10n.register),
                     ),
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Už máte účet? Prihláste sa'),
+                child: const Text('Already have an account? Login'),
               ),
             ],
           ),
