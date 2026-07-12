@@ -167,7 +167,7 @@ abstract class AppLocalizations {
   /// No description provided for @nestiOrdersMessage.
   ///
   /// In en, this message translates to:
-  /// **'You have {count} orders in line. Nesti is crossing her paws!'**
+  /// **'You have {count} active tasks. Nesti is crossing her paws!'**
   String nestiOrdersMessage(Object count);
 
   /// No description provided for @nestiNoOrdersMessage.
@@ -199,6 +199,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Orders'**
   String get orders;
+
+  /// No description provided for @myCreation.
+  ///
+  /// In en, this message translates to:
+  /// **'My Creation'**
+  String get myCreation;
 
   /// No description provided for @projects.
   ///
@@ -583,6 +589,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Charts of your creations coming soon!'**
   String get statsComingSoon;
+
+  /// No description provided for @forCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'For Customer'**
+  String get forCustomer;
+
+  /// No description provided for @forStock.
+  ///
+  /// In en, this message translates to:
+  /// **'For Stock'**
+  String get forStock;
 }
 
 class _AppLocalizationsDelegate

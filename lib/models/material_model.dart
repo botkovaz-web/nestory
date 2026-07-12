@@ -7,6 +7,7 @@ class MaterialModel {
   final double quantity;
   final String unit;
   final String location;
+  final String note;
   final DateTime? updatedAt;
 
   MaterialModel({
@@ -16,6 +17,7 @@ class MaterialModel {
     required this.quantity,
     required this.unit,
     required this.location,
+    this.note = '',
     this.updatedAt,
   });
 
@@ -28,6 +30,7 @@ class MaterialModel {
       quantity: (data['quantity'] ?? 0).toDouble(),
       unit: data['unit'] ?? 'ks',
       location: data['location'] ?? '',
+      note: data['note'] ?? '',
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate(),
     );
   }
@@ -39,6 +42,7 @@ class MaterialModel {
       'quantity': quantity,
       'unit': unit,
       'location': location,
+      'note': note,
       'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : FieldValue.serverTimestamp(),
     };
   }

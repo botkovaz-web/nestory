@@ -45,7 +45,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String nestiOrdersMessage(Object count) {
-    return 'Máš $count objednávky v poradí. Nesti drží palce!';
+    return 'Máš $count aktívnych úloh. Nesti drží palce!';
   }
 
   @override
@@ -63,6 +63,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get orders => 'Objednávky';
+
+  @override
+  String get myCreation => 'Moja tvorba';
 
   @override
   String get projects => 'Projekty';
@@ -255,4 +258,10 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get statsComingSoon => 'Tu čoskoro pribudnú grafy tvojej tvorby!';
+
+  @override
+  String get forCustomer => 'Pre zákazníka';
+
+  @override
+  String get forStock => 'Na sklad';
 }

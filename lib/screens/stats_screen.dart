@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../app_colors.dart';
 import '../l10n/app_localizations.dart';
+import '../services/database_service.dart';
+import '../models/project_model.dart';
 
 class StatsScreen extends StatelessWidget {
   const StatsScreen({super.key});
@@ -10,7 +10,7 @@ class StatsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final user = FirebaseAuth.instance.currentUser;
+    final dbService = DatabaseService();
 
     return Scaffold(
       appBar: AppBar(
@@ -18,8 +18,8 @@ class StatsScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('users').doc(user?.uid).collection('orders').snapshots(),
+      body: StreamBuilder<List<ProjectModel>>(
+        stream: dbService.projects,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
           
@@ -28,16 +28,14 @@ class StatsScreen extends StatelessWidget {
           int pendingOrders = 0;
 
           if (snapshot.hasData) {
-            for (var doc in snapshot.data!.docs) {
-              final data = doc.data() as Map<String, dynamic>;
-              double price = (data['price'] ?? 0).toDouble();
-              String status = data['status'] ?? '';
-              
-              if (status == 'Odoslané' || status == 'Hotovo') {
-                totalRevenue += price;
-                completedOrders++;
-              } else {
-                pendingOrders++;
+            for (var project in snapshot.data!) {
+              if (project.isForCustomer) {
+                if (project.status == 'Hotovo') {
+                  totalRevenue += project.price;
+                  completedOrders++;
+                } else {
+                  pendingOrders++;
+                }
               }
             }
           }
@@ -67,9 +65,9 @@ class StatsScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.7),
+        color: Colors.white.withAlpha(180),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withAlpha(75)),
       ),
       child: Row(
         children: [

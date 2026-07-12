@@ -47,7 +47,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String nestiOrdersMessage(Object count) {
-    return 'You have $count orders in line. Nesti is crossing her paws!';
+    return 'You have $count active tasks. Nesti is crossing her paws!';
   }
 
   @override
@@ -65,6 +65,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get orders => 'Orders';
+
+  @override
+  String get myCreation => 'My Creation';
 
   @override
   String get projects => 'Projects';
@@ -257,4 +260,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statsComingSoon => 'Charts of your creations coming soon!';
+
+  @override
+  String get forCustomer => 'For Customer';
+
+  @override
+  String get forStock => 'For Stock';
 }

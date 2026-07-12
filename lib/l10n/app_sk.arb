@@ -10,12 +10,13 @@
   "nestiMessage4": "Káva v jednej ruke, ihla v druhej. Ideš!",
   "nestiMessage5": "Tvoje výrobky robia svet krajším. Fakt.",
   "nestiMessage6": "Nesti hovorí: Oddych je tiež dôležitý!",
-  "nestiOrdersMessage": "Máš {count} objednávky v poradí. Nesti drží palce!",
+  "nestiOrdersMessage": "Máš {count} aktívnych úloh. Nesti drží palce!",
   "nestiNoOrdersMessage": "Všetko hotové? Nesti navrhuje niečo nové vytvoriť!",
   "material": "Materiál",
   "tools": "Pomôcky",
   "inventory": "Sklad",
   "orders": "Objednávky",
+  "myCreation": "Moja tvorba",
   "projects": "Projekty",
   "planner": "Plánovač",
   "stats": "Štatistiky",
@@ -79,5 +80,7 @@
   "completedOrders": "Dokončené",
   "pendingOrders": "Čakajúce",
   "totalRevenue": "Celkový obrat",
-  "statsComingSoon": "Tu čoskoro pribudnú grafy tvojej tvorby!"
+  "statsComingSoon": "Tu čoskoro pribudnú grafy tvojej tvorby!",
+  "forCustomer": "Pre zákazníka",
+  "forStock": "Na sklad"
 }

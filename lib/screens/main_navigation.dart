@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../app_colors.dart';
 import 'home_screen.dart';
-import 'order_screen.dart';
 import 'inventory_screen.dart';
 import 'project_screen.dart';
 import 'planner_screen.dart';
@@ -32,9 +31,8 @@ class _MainNavigationState extends State<MainNavigation> {
       HomeScreen(onNavigate: _onItemTapped), // 0
       const InventoryScreen(),                // 1
       const ProjectScreen(),                  // 2
-      const OrderScreen(),                    // 3
-      const PlannerScreen(),                  // 4
-      const StatsScreen(),                    // 5
+      const PlannerScreen(),                  // 3
+      const StatsScreen(),                    // 4
     ];
 
     return Scaffold(
@@ -73,14 +71,9 @@ class _MainNavigationState extends State<MainNavigation> {
               label: l10n.inventory,
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.palette_outlined),
-              activeIcon: const Icon(Icons.palette),
+              icon: const Icon(Icons.auto_awesome_mosaic_outlined),
+              activeIcon: const Icon(Icons.auto_awesome_mosaic),
               label: l10n.projects,
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.shopping_bag_outlined),
-              activeIcon: const Icon(Icons.shopping_bag),
-              label: l10n.orders,
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.calendar_today_outlined),

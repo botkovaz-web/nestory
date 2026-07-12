@@ -44,11 +44,10 @@ Try `flutter pub outdated` for more information.
 Launching lib/main.dart on iPhone in debug mode...
 Automatically signing iOS for device deployment using specified development team in Xcode project: QPG4QKHKZ8
 Running Xcode build...                                          
-Xcode build done.                                           28,5s
-Installing and launching...                                        43,5s
- This typically indicates that your device does not have a healthy Internet connection at the moment. The client will operate in offline mode until it is able to successfully connect to the backend.
+Xcode build done.                                           26,9s
+Installing and launching...                                        39,8s
 Target native_assets required define SdkRoot but it was not provided
-Syncing files to device iPhone...                                  203ms
+Syncing files to device iPhone...                                  186ms
 
 Flutter run key commands.
 r Hot reload. 🔥🔥🔥
@@ -58,11 +57,5 @@ d Detach (terminate "flutter run" but leave application running).
 c Clear the screen
 q Quit (terminate the application on the device).
 
-A Dart VM Service on iPhone is available at: http://127.0.0.1:61425/K8kzatnt_1s=/
-The Flutter DevTools debugger and profiler on iPhone is available at: http://127.0.0.1:61425/K8kzatnt_1s=/devtools/?uri=ws://127.0.0.1:61425/K8kzatnt_1s=/ws
-[1m[38;5;196mERROR: [0mAn error occurred while communicating with a remote process. (com.apple.dt.CoreDeviceError error 3 (0x03))
-[1m[38;5;196m       [0m----------------------------------------
-[1m[38;5;196m       [0m    The connection was invalidated. (com.apple.Mercury.error error 1001 (0x3E9))
-[1m[38;5;196m       [0m    XPCConnectionDescription = <RemoteXPCPeerConnection 0x82ec481e0> { <remote connection: 0x82ed003c0> { type = preconnected, state = canceled, remote service name = (null), server mode = 0, protocol version number = 1, protocol feature flags = 0x6, local service version = 0, remote service version = 0, traffic class = 0, (root, reply) helo received = (1, 1), next msg id = 5, first msg id = 1, send in progress = 0, preexisting socket = -1 }
-Script started, output file is /dev/null
-Script done, output file is /dev/null
+A Dart VM Service on iPhone is available at: http://127.0.0.1:55137/LPV7WylqX-o=/
+The Flutter DevTools debugger and profiler on iPhone is available at: http://127.0.0.1:55137/LPV7WylqX-o=/devtools/?uri=ws://127.0.0.1:55137/LPV7WylqX-o=/ws

@@ -10,12 +10,13 @@
   "nestiMessage4": "Coffee in one hand, needle in the other. Go!",
   "nestiMessage5": "Your products make the world more beautiful. Really.",
   "nestiMessage6": "Nesti says: Rest is also important!",
-  "nestiOrdersMessage": "You have {count} orders in line. Nesti is crossing her paws!",
+  "nestiOrdersMessage": "You have {count} active tasks. Nesti is crossing her paws!",
   "nestiNoOrdersMessage": "Everything done? Nesti suggests creating something new!",
   "material": "Material",
   "tools": "Tools",
   "inventory": "Inventory",
   "orders": "Orders",
+  "myCreation": "My Creation",
   "projects": "Projects",
   "planner": "Planner",
   "stats": "Statistics",
@@ -79,5 +80,7 @@
   "completedOrders": "Completed",
   "pendingOrders": "Pending",
   "totalRevenue": "Total Revenue",
-  "statsComingSoon": "Charts of your creations coming soon!"
+  "statsComingSoon": "Charts of your creations coming soon!",
+  "forCustomer": "For Customer",
+  "forStock": "For Stock"
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import '../app_colors.dart';
 import '../models/tool_model.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/add_entry_dialog.dart';
+import '../widgets/nestory_card.dart';
+import '../services/database_service.dart';
 
 class ToolsScreen extends StatefulWidget {
   const ToolsScreen({super.key});
@@ -13,7 +15,7 @@ class ToolsScreen extends StatefulWidget {
 }
 
 class _ToolsScreenState extends State<ToolsScreen> {
-  final user = FirebaseAuth.instance.currentUser;
+  final _dbService = DatabaseService();
 
   String _getLocalizedCategory(BuildContext context, String category) {
     final l10n = AppLocalizations.of(context)!;
@@ -37,99 +39,124 @@ class _ToolsScreenState extends State<ToolsScreen> {
     }
   }
 
+  void _showDetailSheet(ToolModel tool) {
+    final l10n = AppLocalizations.of(context)!;
+    
+    Color conditionColor;
+    switch (tool.condition) {
+      case 'Výborný': conditionColor = Colors.green; break;
+      case 'Potrebuje údržbu': conditionColor = Colors.orange; break;
+      case 'Nefunkčný': conditionColor = Colors.red; break;
+      default: conditionColor = Colors.grey;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
+      backgroundColor: AppColors.background,
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(tool.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                ),
+                IconButton(icon: const Icon(Icons.edit, color: AppColors.accent), onPressed: () {
+                  Navigator.pop(context);
+                  _showAddToolDialog(tool);
+                }),
+              ],
+            ),
+            Text(_getLocalizedCategory(context, tool.category), style: const TextStyle(color: AppColors.accent, fontWeight: FontWeight.w600)),
+            const Divider(height: 32),
+            _buildDetailRow(Icons.info_outline, l10n.status, _getLocalizedCondition(context, tool.condition), conditionColor),
+            if (tool.location.isNotEmpty)
+              _buildDetailRow(Icons.location_on, l10n.location, tool.location),
+            if (tool.note.isNotEmpty)
+              _buildDetailRow(Icons.note, l10n.note, tool.note),
+            if (tool.updatedAt != null)
+              _buildDetailRow(Icons.update, 'Aktualizované', DateFormat('dd.MM.yyyy HH:mm').format(tool.updatedAt!)),
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(IconData icon, String label, String value, [Color? valueColor]) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: Colors.grey),
+          const SizedBox(width: 12),
+          Text('$label: ', style: const TextStyle(color: Colors.grey)),
+          Text(value, style: TextStyle(fontWeight: FontWeight.bold, color: valueColor)),
+        ],
+      ),
+    );
+  }
+
   void _showAddToolDialog([ToolModel? tool]) {
     final l10n = AppLocalizations.of(context)!;
-    final nameController = TextEditingController(text: tool != null ? tool.name : '');
-    final noteController = TextEditingController(text: tool != null ? tool.note : '');
-    final locationController = TextEditingController(text: tool != null ? tool.location : '');
-    String category = tool != null ? tool.category : 'Ručné náradie';
-    String condition = tool != null ? tool.condition : 'Výborný';
+    final nameController = TextEditingController(text: tool?.name ?? '');
+    final noteController = TextEditingController(text: tool?.note ?? '');
+    final locationController = TextEditingController(text: tool?.location ?? '');
+    String category = tool?.category ?? 'Ručné náradie';
+    String condition = tool?.condition ?? 'Výborný';
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(tool == null ? '${l10n.add} ${l10n.tools.toLowerCase()}' : '${l10n.edit} ${l10n.tools.toLowerCase()}'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AddEntryDialog(
+          title: tool == null ? '${l10n.add} ${l10n.tools.toLowerCase()}' : '${l10n.edit} ${l10n.tools.toLowerCase()}',
+          onSave: () async {
+            if (nameController.text.trim().isEmpty) return;
+            final data = ToolModel(
+              id: tool?.id ?? '',
+              name: nameController.text.trim(),
+              category: category,
+              condition: condition,
+              note: noteController.text.trim(),
+              location: locationController.text.trim(),
+            ).toMap();
+
+            if (tool == null) {
+              await _dbService.addTool(data);
+            } else {
+              await _dbService.updateTool(tool.id, data);
+            }
+            if (mounted) Navigator.pop(context);
+          },
+          content: Column(
             children: [
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(labelText: l10n.name),
-              ),
+              TextField(controller: nameController, decoration: InputDecoration(labelText: l10n.name)),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 value: category,
                 decoration: InputDecoration(labelText: l10n.category),
-                items: [
-                  DropdownMenuItem(value: 'Stroje', child: Text(l10n.catMachines)),
-                  DropdownMenuItem(value: 'Ručné náradie', child: Text(l10n.catHandTools)),
-                  DropdownMenuItem(value: 'Meradlá', child: Text(l10n.catMeasuring)),
-                  DropdownMenuItem(value: 'Organizéry', child: Text(l10n.catOrganizers)),
-                  DropdownMenuItem(value: 'Iné', child: Text(l10n.catOther)),
-                ],
+                items: ['Stroje', 'Ručné náradie', 'Meradlá', 'Organizéry', 'Iné'].map((cat) => DropdownMenuItem(value: cat, child: Text(_getLocalizedCategory(context, cat)))).toList(),
                 onChanged: (val) => category = val!,
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 value: condition,
                 decoration: InputDecoration(labelText: l10n.status),
-                items: [
-                  DropdownMenuItem(value: 'Výborný', child: Text(l10n.condExcellent)),
-                  DropdownMenuItem(value: 'Potrebuje údržbu', child: Text(l10n.condMaintenance)),
-                  DropdownMenuItem(value: 'Nefunkčný', child: Text(l10n.condBroken)),
-                ],
+                items: ['Výborný', 'Potrebuje údržbu', 'Nefunkčný'].map((cond) => DropdownMenuItem(value: cond, child: Text(_getLocalizedCondition(context, cond)))).toList(),
                 onChanged: (val) => condition = val!,
               ),
               const SizedBox(height: 16),
-              TextField(
-                controller: locationController,
-                decoration: InputDecoration(labelText: l10n.location),
-              ),
+              TextField(controller: locationController, decoration: InputDecoration(labelText: l10n.location)),
               const SizedBox(height: 16),
-              TextField(
-                controller: noteController,
-                decoration: InputDecoration(labelText: l10n.note),
-                maxLines: 2,
-              ),
+              TextField(controller: noteController, decoration: InputDecoration(labelText: l10n.note), maxLines: 2),
             ],
           ),
         ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
-          ElevatedButton(
-            onPressed: () async {
-              if (nameController.text.trim().isEmpty) return;
-
-              final newTool = ToolModel(
-                id: tool?.id ?? '',
-                name: nameController.text.trim(),
-                category: category,
-                condition: condition,
-                note: noteController.text.trim(),
-                location: locationController.text.trim(),
-              );
-
-              if (tool == null) {
-                await FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(user?.uid)
-                    .collection('tools')
-                    .add(newTool.toMap());
-              } else {
-                await FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(user?.uid)
-                    .collection('tools')
-                    .doc(tool.id)
-                    .update(newTool.toMap());
-              }
-              if (mounted) Navigator.pop(context);
-            },
-            style: ElevatedButton.styleFrom(minimumSize: const Size(100, 40)),
-            child: Text(l10n.save),
-          ),
-        ],
       ),
     );
   }
@@ -144,99 +171,45 @@ class _ToolsScreenState extends State<ToolsScreen> {
         backgroundColor: AppColors.accent,
         child: const Icon(Icons.add, color: Colors.white),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('users')
-            .doc(user?.uid)
-            .collection('tools')
-            .orderBy('updatedAt', descending: true)
-            .snapshots(),
+      body: StreamBuilder<List<ToolModel>>(
+        stream: _dbService.tools,
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+          if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [Image.asset('assets/nesti_watching.png', height: 150), const SizedBox(height: 16), Text(l10n.noTools, style: const TextStyle(color: Colors.grey))]));
           }
-
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset('assets/nesti_watching.png', height: 150),
-                  const SizedBox(height: 16),
-                  Text(l10n.noTools,
-                      style: const TextStyle(color: Colors.grey)),
-                ],
-              ),
-            );
-          }
-
           return ListView.builder(
             padding: const EdgeInsets.all(16),
-            itemCount: snapshot.data!.docs.length,
+            itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
-              final tool = ToolModel.fromFirestore(snapshot.data!.docs[index]);
-
+              final tool = snapshot.data![index];
+              
               Color conditionColor;
               switch (tool.condition) {
-                case 'Výborný':
-                  conditionColor = Colors.green;
-                  break;
-                case 'Potrebuje údržbu':
-                  conditionColor = Colors.orange;
-                  break;
-                case 'Nefunkčný':
-                  conditionColor = Colors.red;
-                  break;
-                default:
-                  conditionColor = Colors.grey;
+                case 'Výborný': conditionColor = Colors.green; break;
+                case 'Potrebuje údržbu': conditionColor = Colors.orange; break;
+                case 'Nefunkčný': conditionColor = Colors.red; break;
+                default: conditionColor = Colors.grey;
               }
 
-              return Card(
-                margin: const EdgeInsets.only(bottom: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                child: ListTile(
-                  title: Text(tool.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(_getLocalizedCategory(context, tool.category)),
-                      if (tool.location.isNotEmpty)
-                        Text('📍 ${tool.location}', style: const TextStyle(fontSize: 12, color: Colors.blueGrey)),
-                      if (tool.note.isNotEmpty)
-                        Text(tool.note, style: const TextStyle(fontSize: 11, fontStyle: FontStyle.italic)),
-                    ],
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: conditionColor.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: conditionColor),
-                        ),
-                        child: Text(
-                          _getLocalizedCondition(context, tool.condition),
-                          style: TextStyle(fontSize: 12, color: conditionColor, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.edit, size: 20),
-                        onPressed: () => _showAddToolDialog(tool),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete, size: 20, color: Colors.redAccent),
-                        onPressed: () => FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(user?.uid)
-                            .collection('tools')
-                            .doc(tool.id)
-                            .delete(),
-                      ),
-                    ],
-                  ),
+              return NestoryCard(
+                title: tool.name,
+                subtitle: Text(_getLocalizedCategory(context, tool.category)),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(color: conditionColor.withOpacity(0.1), borderRadius: BorderRadius.circular(8), border: Border.all(color: conditionColor)),
+                      child: Text(_getLocalizedCondition(context, tool.condition), style: TextStyle(fontSize: 12, color: conditionColor, fontWeight: FontWeight.bold)),
+                    ),
+                    const SizedBox(width: 8),
+                    IconButton(icon: const Icon(Icons.delete, size: 20, color: Colors.redAccent), onPressed: () {
+                      showDialog(context: context, builder: (c) => AlertDialog(title: Text(l10n.deleteConfirmation), actions: [TextButton(onPressed: () => Navigator.pop(c), child: Text(l10n.no)), TextButton(onPressed: () { _dbService.deleteTool(tool.id); Navigator.pop(c); }, child: Text(l10n.yes, style: const TextStyle(color: Colors.red)))]));
+                    }),
+                  ],
                 ),
+                onTap: () => _showDetailSheet(tool),
               );
             },
           );

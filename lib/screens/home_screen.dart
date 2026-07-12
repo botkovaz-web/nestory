@@ -1,16 +1,18 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../app_colors.dart';
 import '../l10n/app_localizations.dart';
+import '../services/database_service.dart';
+import '../services/auth_service.dart';
+import '../models/project_model.dart';
 
 class HomeScreen extends StatelessWidget {
   final Function(int) onNavigate;
 
   const HomeScreen({super.key, required this.onNavigate});
 
-  String _getRandomNestiMessage(BuildContext context, String name, int orderCount) {
+  String _getRandomNestiMessage(BuildContext context, String name, int taskCount) {
     final l10n = AppLocalizations.of(context)!;
     final List<String> messages = [
       l10n.nestiMessage1(name),
@@ -21,8 +23,8 @@ class HomeScreen extends StatelessWidget {
       l10n.nestiMessage6,
     ];
 
-    if (orderCount > 0) {
-      messages.add(l10n.nestiOrdersMessage(orderCount));
+    if (taskCount > 0) {
+      messages.add(l10n.nestiOrdersMessage(taskCount));
     } else {
       messages.add(l10n.nestiNoOrdersMessage);
     }
@@ -32,8 +34,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
     final l10n = AppLocalizations.of(context)!;
+    final dbService = DatabaseService();
+    final authService = AuthService();
 
     return Scaffold(
       appBar: AppBar(
@@ -43,28 +46,23 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.grey),
-            onPressed: () => FirebaseAuth.instance.signOut(),
+            onPressed: () => authService.signOut(),
           ),
         ],
       ),
       body: StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance.collection('users').doc(user?.uid).snapshots(),
+        stream: dbService.userData,
         builder: (context, userSnapshot) {
           String name = l10n.creator;
           if (userSnapshot.hasData && userSnapshot.data!.exists) {
             name = (userSnapshot.data!.data() as Map<String, dynamic>)['name'] ?? l10n.creator;
           }
 
-          return StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('users')
-                .doc(user?.uid)
-                .collection('orders')
-                .where('status', whereIn: ['V poradí', 'V procese'])
-                .snapshots(),
-            builder: (context, ordersSnapshot) {
-              int activeOrders = ordersSnapshot.hasData ? ordersSnapshot.data!.docs.length : 0;
-              String nestiMessage = _getRandomNestiMessage(context, name, activeOrders);
+          return StreamBuilder<List<ProjectModel>>(
+            stream: dbService.activeProjects,
+            builder: (context, projectsSnapshot) {
+              int activeTasks = projectsSnapshot.hasData ? projectsSnapshot.data!.length : 0;
+              String nestiMessage = _getRandomNestiMessage(context, name, activeTasks);
 
               return Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -144,16 +142,16 @@ class HomeScreen extends StatelessWidget {
                               children: [
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  l10n.orders,
-                                  'assets/nesti_packing.png',
-                                  () => onNavigate(3), 
+                                  l10n.customers,
+                                  'assets/icon_manage.png',
+                                  () {}, 
                                 )),
                                 const SizedBox(width: 16),
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  l10n.customers,
-                                  'assets/icon_manage.png',
-                                  () {}, // Future section
+                                  l10n.planner,
+                                  'assets/nesti_planning.png',
+                                  () => onNavigate(3),
                                 )),
                               ],
                             ),
@@ -164,17 +162,12 @@ class HomeScreen extends StatelessWidget {
                               children: [
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  l10n.planner,
-                                  'assets/nesti_planning.png',
+                                  l10n.stats,
+                                  'assets/icon_grow.png',
                                   () => onNavigate(4),
                                 )),
                                 const SizedBox(width: 16),
-                                Expanded(child: _buildDashboardCard(
-                                  context,
-                                  l10n.stats,
-                                  'assets/icon_grow.png',
-                                  () => onNavigate(5),
-                                )),
+                                const Spacer(),
                               ],
                             ),
                           ),
