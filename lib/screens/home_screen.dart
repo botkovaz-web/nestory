@@ -124,15 +124,15 @@ class HomeScreen extends StatelessWidget {
                               children: [
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  l10n.material,
+                                  l10n.inventory,
                                   'assets/nesti_organizing.png',
                                   () => onNavigate(1), 
                                 )),
                                 const SizedBox(width: 16),
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  l10n.tools,
-                                  'assets/nesti_watching.png',
+                                  l10n.projects,
+                                  'assets/nesti_in_basket.png',
                                   () => onNavigate(2), 
                                 )),
                               ],
@@ -144,16 +144,16 @@ class HomeScreen extends StatelessWidget {
                               children: [
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  l10n.projects,
-                                  'assets/nesti_in_basket.png',
+                                  l10n.orders,
+                                  'assets/nesti_packing.png',
                                   () => onNavigate(3), 
                                 )),
                                 const SizedBox(width: 16),
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  l10n.orders,
-                                  'assets/nesti_packing.png',
-                                  () => onNavigate(4), 
+                                  l10n.customers,
+                                  'assets/icon_manage.png',
+                                  () {}, // Future section
                                 )),
                               ],
                             ),
@@ -166,7 +166,7 @@ class HomeScreen extends StatelessWidget {
                                   context,
                                   l10n.planner,
                                   'assets/nesti_planning.png',
-                                  () => onNavigate(5),
+                                  () => onNavigate(4),
                                 )),
                                 const SizedBox(width: 16),
                                 Expanded(child: _buildDashboardCard(

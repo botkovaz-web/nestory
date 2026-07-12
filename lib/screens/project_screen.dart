@@ -249,10 +249,37 @@ class _ProjectScreenState extends State<ProjectScreen> {
                     : Container(width: 50, height: 50, decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(8)), child: const Icon(Icons.palette_outlined, color: Colors.grey)),
                   title: Text(project.name, style: const TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text(_getLocalizedStatus(context, project.status), style: TextStyle(color: project.status == 'Hotovo' ? Colors.green : Colors.orange)),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit, size: 20),
+                        onPressed: () => _showAddProjectDialog(project),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete, size: 20, color: Colors.redAccent),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (c) => AlertDialog(
+                              title: Text(l10n.deleteConfirmation),
+                              actions: [
+                                TextButton(onPressed: () => Navigator.pop(c), child: Text(l10n.no)),
+                                TextButton(
+                                  onPressed: () {
+                                    FirebaseFirestore.instance.collection('users').doc(user?.uid).collection('projects').doc(project.id).delete();
+                                    Navigator.pop(c);
+                                  },
+                                  child: Text(l10n.yes, style: const TextStyle(color: Colors.red)),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                   onTap: () => _showAddProjectDialog(project),
-                  onLongPress: () {
-                    showDialog(context: context, builder: (c) => AlertDialog(title: Text(l10n.deleteConfirmation), actions: [TextButton(onPressed: () => Navigator.pop(c), child: Text(l10n.no)), TextButton(onPressed: () { FirebaseFirestore.instance.collection('users').doc(user?.uid).collection('projects').doc(project.id).delete(); Navigator.pop(c); }, child: Text(l10n.yes, style: const TextStyle(color: Colors.red)))]));
-                  },
                 ),
               );
             },

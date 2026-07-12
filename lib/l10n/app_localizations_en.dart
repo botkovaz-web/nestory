@@ -61,6 +61,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tools => 'Tools';
 
   @override
+  String get inventory => 'Inventory';
+
+  @override
   String get orders => 'Orders';
 
   @override
@@ -71,6 +74,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stats => 'Statistics';
+
+  @override
+  String get customers => 'Customers';
 
   @override
   String get logout => 'Logout';
@@ -230,4 +236,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unitPacks => 'packs';
+
+  @override
+  String get event => 'Event';
+
+  @override
+  String get term => 'Deadline';
+
+  @override
+  String get inventoryToTake => 'Inventory to take';
+
+  @override
+  String get completedOrders => 'Completed';
+
+  @override
+  String get pendingOrders => 'Pending';
+
+  @override
+  String get totalRevenue => 'Total Revenue';
+
+  @override
+  String get statsComingSoon => 'Charts of your creations coming soon!';
 }

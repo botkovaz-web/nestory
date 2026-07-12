@@ -29,43 +29,108 @@ class _PlannerScreenState extends State<PlannerScreen> {
     _selectedDay = _focusedDay;
   }
 
-  Future<void> _showAddEventDialog() async {
+  Future<void> _showAddEventDialog([EventModel? event]) async {
     final l10n = AppLocalizations.of(context)!;
-    final titleController = TextEditingController();
-    final descController = TextEditingController();
-    DateTime selectedDate = _selectedDay ?? DateTime.now();
+    final titleController = TextEditingController(text: event?.title ?? '');
+    final descController = TextEditingController(text: event?.description ?? '');
+    final locController = TextEditingController(text: event?.location ?? '');
+    DateTime selectedDate = event?.date ?? _selectedDay ?? DateTime.now();
+    List<String> selectedInventory = List.from(event?.inventoryItems ?? []);
 
     await showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('${l10n.add} udalosť'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(controller: titleController, decoration: InputDecoration(labelText: l10n.name)),
-            const SizedBox(height: 8),
-            TextField(controller: descController, decoration: InputDecoration(labelText: l10n.note)),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text(event == null ? '${l10n.add} ${l10n.event.toLowerCase()}' : '${l10n.edit} ${l10n.event.toLowerCase()}'),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(controller: titleController, decoration: InputDecoration(labelText: l10n.name)),
+                  const SizedBox(height: 8),
+                  TextField(controller: locController, decoration: InputDecoration(labelText: l10n.location)),
+                  const SizedBox(height: 8),
+                  TextField(controller: descController, decoration: InputDecoration(labelText: l10n.note), maxLines: 2),
+                  const SizedBox(height: 16),
+                  const Divider(),
+                  Text(l10n.inventory, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  _buildInventorySelection(
+                    selected: selectedInventory,
+                    onChanged: (list) => setDialogState(() => selectedInventory = list),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
+            ElevatedButton(
+              onPressed: () async {
+                if (titleController.text.isEmpty) return;
+                final eventData = EventModel(
+                  id: event?.id ?? '',
+                  title: titleController.text.trim(),
+                  description: descController.text.trim(),
+                  location: locController.text.trim(),
+                  inventoryItems: selectedInventory,
+                  date: selectedDate,
+                  type: 'event',
+                ).toMap();
+
+                if (event == null) {
+                  await FirebaseFirestore.instance.collection('users').doc(user?.uid).collection('events').add(eventData);
+                } else {
+                  await FirebaseFirestore.instance.collection('users').doc(user?.uid).collection('events').doc(event.id).update(eventData);
+                }
+                if (mounted) Navigator.pop(context);
+              },
+              child: Text(l10n.save),
+            ),
           ],
         ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
-          ElevatedButton(
-            onPressed: () async {
-              if (titleController.text.isEmpty) return;
-              final newEvent = EventModel(
-                id: '',
-                title: titleController.text.trim(),
-                description: descController.text.trim(),
-                date: selectedDate,
-                type: 'event',
-              );
-              await FirebaseFirestore.instance.collection('users').doc(user?.uid).collection('events').add(newEvent.toMap());
-              if (mounted) Navigator.pop(context);
-            },
-            child: Text(l10n.save),
-          ),
-        ],
       ),
+    );
+  }
+
+  Widget _buildInventorySelection({required List<String> selected, required Function(List<String>) onChanged}) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('users').doc(user?.uid).collection('materials').snapshots(),
+      builder: (context, materialSnap) {
+        return StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('users').doc(user?.uid).collection('projects').snapshots(),
+          builder: (context, projectSnap) {
+            List<String> allItems = [];
+            if (materialSnap.hasData) {
+              allItems.addAll(materialSnap.data!.docs.map((d) => d['name'] as String));
+            }
+            if (projectSnap.hasData) {
+              allItems.addAll(projectSnap.data!.docs.map((d) => d['name'] as String));
+            }
+
+            if (allItems.isEmpty) return const SizedBox();
+
+            return Wrap(
+              spacing: 4,
+              children: allItems.map((name) {
+                final isSel = selected.contains(name);
+                return FilterChip(
+                  label: Text(name, style: const TextStyle(fontSize: 11)),
+                  selected: isSel,
+                  onSelected: (s) {
+                    final newList = List<String>.from(selected);
+                    s ? newList.add(name) : newList.remove(name);
+                    onChanged(newList);
+                  },
+                  padding: EdgeInsets.zero,
+                );
+              }).toList(),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -75,7 +140,7 @@ class _PlannerScreenState extends State<PlannerScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.planner), backgroundColor: Colors.transparent, elevation: 0),
       floatingActionButton: FloatingActionButton(
-        onPressed: _showAddEventDialog,
+        onPressed: () => _showAddEventDialog(),
         backgroundColor: AppColors.accent,
         child: const Icon(Icons.add, color: Colors.white),
       ),
@@ -160,20 +225,22 @@ class _PlannerScreenState extends State<PlannerScreen> {
                                 String type = '';
                                 IconData icon = Icons.event;
                                 Color color = Colors.grey;
+                                String? subtitle;
 
                                 if (item is EventModel) {
                                   title = item.title;
-                                  type = 'Udalosť';
+                                  type = l10n.event;
                                   icon = Icons.festival;
                                   color = AppColors.accent;
+                                  if (item.location.isNotEmpty) subtitle = item.location;
                                 } else if (item is OrderModel) {
                                   title = '${l10n.orders}: ${item.customerName}';
-                                  type = l10n.deadline;
+                                  type = l10n.term;
                                   icon = Icons.shopping_bag;
                                   color = Colors.orange;
                                 } else if (item is ProjectModel) {
                                   title = '${l10n.projects}: ${item.name}';
-                                  type = l10n.deadline;
+                                  type = l10n.term;
                                   icon = Icons.palette;
                                   color = Colors.blue;
                                 }
@@ -183,10 +250,11 @@ class _PlannerScreenState extends State<PlannerScreen> {
                                   child: ListTile(
                                     leading: Icon(icon, color: color),
                                     title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                    subtitle: Text(type),
+                                    subtitle: Text(subtitle ?? type),
                                     trailing: item is EventModel 
                                       ? IconButton(icon: const Icon(Icons.delete, size: 20), onPressed: () => FirebaseFirestore.instance.collection('users').doc(user?.uid).collection('events').doc(item.id).delete())
                                       : null,
+                                    onTap: item is EventModel ? () => _showAddEventDialog(item) : null,
                                   ),
                                 );
                               },

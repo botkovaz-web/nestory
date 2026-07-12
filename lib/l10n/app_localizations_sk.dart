@@ -59,6 +59,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get tools => 'Pomôcky';
 
   @override
+  String get inventory => 'Sklad';
+
+  @override
   String get orders => 'Objednávky';
 
   @override
@@ -69,6 +72,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get stats => 'Štatistiky';
+
+  @override
+  String get customers => 'Zákazníci';
 
   @override
   String get logout => 'Odhlásiť sa';
@@ -228,4 +234,25 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get unitPacks => 'balenia';
+
+  @override
+  String get event => 'Udalosť';
+
+  @override
+  String get term => 'Termín';
+
+  @override
+  String get inventoryToTake => 'Zásoby na akciu';
+
+  @override
+  String get completedOrders => 'Dokončené';
+
+  @override
+  String get pendingOrders => 'Čakajúce';
+
+  @override
+  String get totalRevenue => 'Celkový obrat';
+
+  @override
+  String get statsComingSoon => 'Tu čoskoro pribudnú grafy tvojej tvorby!';
 }

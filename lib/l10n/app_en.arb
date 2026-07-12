@@ -14,10 +14,12 @@
   "nestiNoOrdersMessage": "Everything done? Nesti suggests creating something new!",
   "material": "Material",
   "tools": "Tools",
+  "inventory": "Inventory",
   "orders": "Orders",
   "projects": "Projects",
   "planner": "Planner",
   "stats": "Statistics",
+  "customers": "Customers",
   "logout": "Logout",
   "login": "Login",
   "register": "Register",
@@ -70,5 +72,12 @@
   "unitMeters": "m",
   "unitBalls": "balls",
   "unitSheets": "sheets",
-  "unitPacks": "packs"
+  "unitPacks": "packs",
+  "event": "Event",
+  "term": "Deadline",
+  "inventoryToTake": "Inventory to take",
+  "completedOrders": "Completed",
+  "pendingOrders": "Pending",
+  "totalRevenue": "Total Revenue",
+  "statsComingSoon": "Charts of your creations coming soon!"
 }

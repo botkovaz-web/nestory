@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'Tools'**
   String get tools;
 
+  /// No description provided for @inventory.
+  ///
+  /// In en, this message translates to:
+  /// **'Inventory'**
+  String get inventory;
+
   /// No description provided for @orders.
   ///
   /// In en, this message translates to:
@@ -211,6 +217,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Statistics'**
   String get stats;
+
+  /// No description provided for @customers.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers'**
+  String get customers;
 
   /// No description provided for @logout.
   ///
@@ -529,6 +541,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'packs'**
   String get unitPacks;
+
+  /// No description provided for @event.
+  ///
+  /// In en, this message translates to:
+  /// **'Event'**
+  String get event;
+
+  /// No description provided for @term.
+  ///
+  /// In en, this message translates to:
+  /// **'Deadline'**
+  String get term;
+
+  /// No description provided for @inventoryToTake.
+  ///
+  /// In en, this message translates to:
+  /// **'Inventory to take'**
+  String get inventoryToTake;
+
+  /// No description provided for @completedOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completedOrders;
+
+  /// No description provided for @pendingOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pendingOrders;
+
+  /// No description provided for @totalRevenue.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Revenue'**
+  String get totalRevenue;
+
+  /// No description provided for @statsComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Charts of your creations coming soon!'**
+  String get statsComingSoon;
 }
 
 class _AppLocalizationsDelegate

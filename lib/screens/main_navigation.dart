@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../app_colors.dart';
 import 'home_screen.dart';
 import 'order_screen.dart';
-import 'material_screen.dart';
-import 'tools_screen.dart';
+import 'inventory_screen.dart';
 import 'project_screen.dart';
 import 'planner_screen.dart';
+import 'stats_screen.dart';
 import '../l10n/app_localizations.dart';
 
 class MainNavigation extends StatefulWidget {
@@ -30,11 +30,11 @@ class _MainNavigationState extends State<MainNavigation> {
     
     final List<Widget> _screens = [
       HomeScreen(onNavigate: _onItemTapped), // 0
-      const MaterialScreen(),                 // 1
-      const ToolsScreen(),                    // 2
-      const ProjectScreen(),                  // 3
-      const OrderScreen(),                    // 4
-      const PlannerScreen(),                  // 5
+      const InventoryScreen(),                // 1
+      const ProjectScreen(),                  // 2
+      const OrderScreen(),                    // 3
+      const PlannerScreen(),                  // 4
+      const StatsScreen(),                    // 5
     ];
 
     return Scaffold(
@@ -70,12 +70,7 @@ class _MainNavigationState extends State<MainNavigation> {
             BottomNavigationBarItem(
               icon: const Icon(Icons.inventory_2_outlined),
               activeIcon: const Icon(Icons.inventory_2),
-              label: l10n.material,
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.build_outlined),
-              activeIcon: const Icon(Icons.build),
-              label: l10n.tools,
+              label: l10n.inventory,
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.palette_outlined),
@@ -91,6 +86,11 @@ class _MainNavigationState extends State<MainNavigation> {
               icon: const Icon(Icons.calendar_today_outlined),
               activeIcon: const Icon(Icons.calendar_today),
               label: l10n.planner,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.bar_chart_outlined),
+              activeIcon: const Icon(Icons.bar_chart),
+              label: l10n.stats,
             ),
           ],
         ),

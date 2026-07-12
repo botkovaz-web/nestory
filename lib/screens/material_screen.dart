@@ -160,11 +160,6 @@ class _MaterialScreenState extends State<MaterialScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.material),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'material_fab_unique',
         onPressed: () => _showAddMaterialDialog(),

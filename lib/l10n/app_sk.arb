@@ -14,10 +14,12 @@
   "nestiNoOrdersMessage": "Všetko hotové? Nesti navrhuje niečo nové vytvoriť!",
   "material": "Materiál",
   "tools": "Pomôcky",
+  "inventory": "Sklad",
   "orders": "Objednávky",
   "projects": "Projekty",
   "planner": "Plánovač",
   "stats": "Štatistiky",
+  "customers": "Zákazníci",
   "logout": "Odhlásiť sa",
   "login": "Prihlásiť sa",
   "register": "Registrácia",
@@ -70,5 +72,12 @@
   "unitMeters": "m",
   "unitBalls": "klbka",
   "unitSheets": "hárky",
-  "unitPacks": "balenia"
+  "unitPacks": "balenia",
+  "event": "Udalosť",
+  "term": "Termín",
+  "inventoryToTake": "Zásoby na akciu",
+  "completedOrders": "Dokončené",
+  "pendingOrders": "Čakajúce",
+  "totalRevenue": "Celkový obrat",
+  "statsComingSoon": "Tu čoskoro pribudnú grafy tvojej tvorby!"
 }

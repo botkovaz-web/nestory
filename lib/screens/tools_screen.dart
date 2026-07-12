@@ -138,11 +138,6 @@ class _ToolsScreenState extends State<ToolsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.tools),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'tools_fab_unique',
         onPressed: () => _showAddToolDialog(),
