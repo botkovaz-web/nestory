@@ -212,6 +212,12 @@ abstract class AppLocalizations {
   /// **'Projects'**
   String get projects;
 
+  /// No description provided for @guides.
+  ///
+  /// In en, this message translates to:
+  /// **'Guides'**
+  String get guides;
+
   /// No description provided for @planner.
   ///
   /// In en, this message translates to:
@@ -229,6 +235,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Customers'**
   String get customers;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
 
   /// No description provided for @logout.
   ///
@@ -284,6 +302,12 @@ abstract class AppLocalizations {
   /// **'Name'**
   String get name;
 
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
   /// No description provided for @category.
   ///
   /// In en, this message translates to:
@@ -338,6 +362,12 @@ abstract class AppLocalizations {
   /// **'No projects yet.'**
   String get noProjects;
 
+  /// No description provided for @noGuides.
+  ///
+  /// In en, this message translates to:
+  /// **'No guides yet.'**
+  String get noGuides;
+
   /// No description provided for @customerName.
   ///
   /// In en, this message translates to:
@@ -379,6 +409,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete this item?'**
   String get deleteConfirmation;
+
+  /// No description provided for @deleteProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Profile'**
+  String get deleteProfile;
+
+  /// No description provided for @deleteProfileWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This will permanently delete your account and all your data. This action cannot be undone.'**
+  String get deleteProfileWarning;
+
+  /// No description provided for @termsAndConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & Conditions'**
+  String get termsAndConditions;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
 
   /// No description provided for @yes.
   ///

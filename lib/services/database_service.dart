@@ -4,6 +4,7 @@ import '../models/material_model.dart';
 import '../models/tool_model.dart';
 import '../models/project_model.dart';
 import '../models/event_model.dart';
+import '../models/guide_model.dart';
 
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -98,5 +99,25 @@ class DatabaseService {
 
   Future<void> deleteEvent(String id) async {
     await _db.collection('users').doc(uid).collection('events').doc(id).delete();
+  }
+
+  // --- NÁVODY ---
+  Stream<List<GuideModel>> get guides {
+    return _db.collection('users').doc(uid).collection('guides')
+      .orderBy('updatedAt', descending: true)
+      .snapshots()
+      .map((snap) => snap.docs.map((doc) => GuideModel.fromFirestore(doc)).toList());
+  }
+
+  Future<void> addGuide(Map<String, dynamic> data) async {
+    await _db.collection('users').doc(uid).collection('guides').add(data);
+  }
+
+  Future<void> updateGuide(String id, Map<String, dynamic> data) async {
+    await _db.collection('users').doc(uid).collection('guides').doc(id).update(data);
+  }
+
+  Future<void> deleteGuide(String id) async {
+    await _db.collection('users').doc(uid).collection('guides').doc(id).delete();
   }
 }

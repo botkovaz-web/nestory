@@ -5,6 +5,8 @@ import 'inventory_screen.dart';
 import 'project_screen.dart';
 import 'planner_screen.dart';
 import 'stats_screen.dart';
+import 'settings_screen.dart';
+import 'guide_screen.dart';
 import '../l10n/app_localizations.dart';
 
 class MainNavigation extends StatefulWidget {
@@ -32,7 +34,9 @@ class _MainNavigationState extends State<MainNavigation> {
       const InventoryScreen(),                // 1
       const ProjectScreen(),                  // 2
       const PlannerScreen(),                  // 3
-      const StatsScreen(),                    // 4
+      const GuideScreen(),                    // 4
+      const StatsScreen(),                    // 5
+      const SettingsScreen(),                 // 6
     ];
 
     return Scaffold(
@@ -71,8 +75,8 @@ class _MainNavigationState extends State<MainNavigation> {
               label: l10n.inventory,
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.auto_awesome_mosaic_outlined),
-              activeIcon: const Icon(Icons.auto_awesome_mosaic),
+              icon: const Icon(Icons.palette_outlined),
+              activeIcon: const Icon(Icons.palette),
               label: l10n.projects,
             ),
             BottomNavigationBarItem(
@@ -81,9 +85,14 @@ class _MainNavigationState extends State<MainNavigation> {
               label: l10n.planner,
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.bar_chart_outlined),
-              activeIcon: const Icon(Icons.bar_chart),
-              label: l10n.stats,
+              icon: const Icon(Icons.library_books_outlined),
+              activeIcon: const Icon(Icons.library_books),
+              label: l10n.guides,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.settings_outlined),
+              activeIcon: const Icon(Icons.settings),
+              label: l10n.settings,
             ),
           ],
         ),

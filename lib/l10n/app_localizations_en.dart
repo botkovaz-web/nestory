@@ -73,6 +73,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get projects => 'Projects';
 
   @override
+  String get guides => 'Guides';
+
+  @override
   String get planner => 'Planner';
 
   @override
@@ -80,6 +83,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get customers => 'Customers';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get profile => 'Profile';
 
   @override
   String get logout => 'Logout';
@@ -109,6 +118,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get name => 'Name';
 
   @override
+  String get email => 'Email';
+
+  @override
   String get category => 'Category';
 
   @override
@@ -136,6 +148,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noProjects => 'No projects yet.';
 
   @override
+  String get noGuides => 'No guides yet.';
+
+  @override
   String get customerName => 'Customer Name';
 
   @override
@@ -155,6 +170,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteConfirmation => 'Delete this item?';
+
+  @override
+  String get deleteProfile => 'Delete Profile';
+
+  @override
+  String get deleteProfileWarning =>
+      'This will permanently delete your account and all your data. This action cannot be undone.';
+
+  @override
+  String get termsAndConditions => 'Terms & Conditions';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
 
   @override
   String get yes => 'Yes';

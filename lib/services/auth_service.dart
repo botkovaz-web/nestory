@@ -17,7 +17,6 @@ class AuthService {
   Future<UserCredential> signUp(String email, String password, String name) async {
     UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
     
-    // Vytvorenie dokumentu používateľa
     await _db.collection('users').doc(result.user!.uid).set({
       'uid': result.user!.uid,
       'name': name,
@@ -35,4 +34,40 @@ class AuthService {
 
   // Získanie ID aktuálneho používateľa
   String? get currentUserId => _auth.currentUser?.uid;
+
+  // HLBOKÉ vymazanie používateľa a všetkých jeho dát
+  Future<void> deleteAccount(String password) async {
+    final currentUser = _auth.currentUser;
+    final uid = currentUser?.uid;
+    if (uid == null || currentUser?.email == null) return;
+
+    try {
+      // 1. Re-autentifikácia (nevyhnutné pre produkciu)
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: currentUser!.email!,
+        password: password,
+      );
+      await currentUser.reauthenticateWithCredential(credential);
+
+      // 2. Zoznam všetkých podkolekcií, ktoré treba vyčistiť
+      final subcollections = ['materials', 'tools', 'projects', 'events'];
+
+      for (var collName in subcollections) {
+        final snap = await _db.collection('users').doc(uid).collection(collName).get();
+        for (var doc in snap.docs) {
+          await doc.reference.delete();
+        }
+      }
+
+      // 3. Vymazanie hlavného profilu
+      await _db.collection('users').doc(uid).delete();
+
+      // 4. Vymazanie samotného Auth konta
+      await currentUser.delete();
+      
+    } catch (e) {
+      print('Chyba pri hĺbkovom mazaní účtu: $e');
+      rethrow;
+    }
+  }
 }

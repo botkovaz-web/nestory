@@ -71,6 +71,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get projects => 'Projekty';
 
   @override
+  String get guides => 'Návody';
+
+  @override
   String get planner => 'Plánovač';
 
   @override
@@ -78,6 +81,12 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get customers => 'Zákazníci';
+
+  @override
+  String get settings => 'Nastavenia';
+
+  @override
+  String get profile => 'Profil';
 
   @override
   String get logout => 'Odhlásiť sa';
@@ -107,6 +116,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get name => 'Názov';
 
   @override
+  String get email => 'Email';
+
+  @override
   String get category => 'Kategória';
 
   @override
@@ -134,6 +146,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get noProjects => 'Zatiaľ žiadne projekty.';
 
   @override
+  String get noGuides => 'Zatiaľ žiadne návody.';
+
+  @override
   String get customerName => 'Meno zákazníka';
 
   @override
@@ -153,6 +168,19 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get deleteConfirmation => 'Vymazať túto položku?';
+
+  @override
+  String get deleteProfile => 'Zmazať profil';
+
+  @override
+  String get deleteProfileWarning =>
+      'Týmto natrvalo odstránite svoj účet a všetky vaše údaje. Túto akciu nie je možné vrátiť späť.';
+
+  @override
+  String get termsAndConditions => 'Obchodné podmienky';
+
+  @override
+  String get privacyPolicy => 'Ochrana súkromia';
 
   @override
   String get yes => 'Áno';

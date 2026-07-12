@@ -20,6 +20,20 @@ class StorageService {
     return await uploadTask.ref.getDownloadURL();
   }
 
+  /// Nahrá súbor (obrázok alebo PDF) pre návody.
+  Future<String> uploadGuideFile(File file, String extension) async {
+    final fileName = '${DateTime.now().millisecondsSinceEpoch}.$extension';
+    final ref = _storage
+        .ref()
+        .child('users')
+        .child(_uid)
+        .child('guides')
+        .child(fileName);
+
+    final uploadTask = await ref.putFile(file);
+    return await uploadTask.ref.getDownloadURL();
+  }
+
   /// Voliteľné: Zmaže obrázok zo storage (ak by si chcela šetriť miesto).
   Future<void> deleteImage(String imageUrl) async {
     try {

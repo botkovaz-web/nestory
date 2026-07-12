@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../app_colors.dart';
 import '../l10n/app_localizations.dart';
 import '../services/database_service.dart';
-import '../services/auth_service.dart';
 import '../models/project_model.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -36,7 +35,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final dbService = DatabaseService();
-    final authService = AuthService();
 
     return Scaffold(
       appBar: AppBar(
@@ -45,8 +43,8 @@ class HomeScreen extends StatelessWidget {
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout, color: Colors.grey),
-            onPressed: () => authService.signOut(),
+            icon: const Icon(Icons.settings, color: Colors.grey),
+            onPressed: () => onNavigate(6), // Naviguje na SettingsScreen
           ),
         ],
       ),
@@ -142,9 +140,9 @@ class HomeScreen extends StatelessWidget {
                               children: [
                                 Expanded(child: _buildDashboardCard(
                                   context,
-                                  l10n.customers,
+                                  l10n.guides,
                                   'assets/icon_manage.png',
-                                  () {}, 
+                                  () => onNavigate(4), 
                                 )),
                                 const SizedBox(width: 16),
                                 Expanded(child: _buildDashboardCard(
@@ -164,10 +162,15 @@ class HomeScreen extends StatelessWidget {
                                   context,
                                   l10n.stats,
                                   'assets/icon_grow.png',
-                                  () => onNavigate(4),
+                                  () => onNavigate(5),
                                 )),
                                 const SizedBox(width: 16),
-                                const Spacer(),
+                                Expanded(child: _buildDashboardCard(
+                                  context,
+                                  l10n.settings,
+                                  'assets/nesti_relax.png', 
+                                  () => onNavigate(6),
+                                )),
                               ],
                             ),
                           ),
