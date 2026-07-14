@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart' as pk;
+import 'package:file_picker/file_picker.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../app_colors.dart';
 import '../models/guide_model.dart';
@@ -46,10 +46,12 @@ class _GuideScreenState extends State<GuideScreen> {
             
             try {
               String finalUrl = currentUrl ?? '';
+              String finalFileType = fileType;
+              
               if (pickedFile != null) {
                 final extension = pickedFile!.path.split('.').last.toLowerCase();
                 finalUrl = await _storageService.uploadGuideFile(pickedFile!, extension);
-                fileType = (extension == 'pdf') ? 'pdf' : 'image';
+                finalFileType = (extension == 'pdf') ? 'pdf' : 'image';
               }
 
               final data = GuideModel(
@@ -57,7 +59,7 @@ class _GuideScreenState extends State<GuideScreen> {
                 title: titleController.text.trim(),
                 category: category,
                 fileUrl: finalUrl,
-                fileType: fileType,
+                fileType: finalFileType,
                 note: noteController.text.trim(),
               ).toMap();
 
@@ -89,9 +91,8 @@ class _GuideScreenState extends State<GuideScreen> {
               ElevatedButton.icon(
                 onPressed: () async {
                   try {
-                    // Using prefixed import to avoid any naming conflicts
-                    final pk.FilePickerResult? result = await pk.FilePicker.platform.pickFiles(
-                      type: pk.FileType.custom,
+                    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+                      type: FileType.custom,
                       allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
                     );
                     
@@ -106,8 +107,13 @@ class _GuideScreenState extends State<GuideScreen> {
                   }
                 },
                 icon: const Icon(Icons.attach_file),
-                label: Text(fileName ?? (currentUrl != null ? 'Súbor vybraný' : 'Vybrať súbor (Foto/PDF)')),
+                label: Text(fileName ?? (currentUrl != null ? 'Zmeniť súbor' : 'Vybrať súbor (Foto/PDF)')),
               ),
+              if (currentUrl != null && fileName == null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text('Aktuálny súbor: ${fileType.toUpperCase()}', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                ),
               const SizedBox(height: 16),
               TextField(controller: noteController, decoration: InputDecoration(labelText: l10n.note), maxLines: 2),
             ],
@@ -158,26 +164,35 @@ class _GuideScreenState extends State<GuideScreen> {
                 leading: Icon(guide.fileType == 'pdf' ? Icons.picture_as_pdf : Icons.image, color: AppColors.accent),
                 title: guide.title,
                 subtitle: Text(guide.category),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete, size: 20, color: Colors.redAccent),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (c) => AlertDialog(
-                        title: Text(l10n.deleteConfirmation),
-                        actions: [
-                          TextButton(onPressed: () => Navigator.pop(c), child: Text(l10n.no)),
-                          TextButton(
-                            onPressed: () {
-                              _dbService.deleteGuide(guide.id);
-                              Navigator.pop(c);
-                            },
-                            child: Text(l10n.yes, style: const TextStyle(color: Colors.red)),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit, size: 20),
+                      onPressed: () => _showAddGuideDialog(guide),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete, size: 20, color: Colors.redAccent),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (c) => AlertDialog(
+                            title: Text(l10n.deleteConfirmation),
+                            actions: [
+                              TextButton(onPressed: () => Navigator.pop(c), child: Text(l10n.no)),
+                              TextButton(
+                                onPressed: () {
+                                  _dbService.deleteGuide(guide.id);
+                                  Navigator.pop(c);
+                                },
+                                child: Text(l10n.yes, style: const TextStyle(color: Colors.red)),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    );
-                  },
+                        );
+                      },
+                    ),
+                  ],
                 ),
                 onTap: () => _viewGuide(guide),
               );

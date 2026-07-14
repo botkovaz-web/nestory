@@ -1,2 +1,22 @@
 Launching lib/main.dart on iPhone in debug mode...
 Automatically signing iOS for device deployment using specified development team in Xcode project: QPG4QKHKZ8
+Running Xcode build...                                          
+Xcode build done.                                           36,8s
+Installing and launching...                                     
+objc[24321]: Class FileUtils is implemented in both /System/Library/PrivateFrameworks/OSAnalytics.framework/OSAnalytics (0x1fe8e9068) and /private/var/containers/Bundle/Application/B112000C-AE82-4BC1-93FC-15FD4C264A54/Runner.app/Frameworks/file_picker.framework/file_picker (0x100d22300). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+Installing and launching...                                        42,5s
+ This typically indicates that your device does not have a healthy Internet connection at the moment. The client will operate in offline mode until it is able to successfully connect to the backend.
+Target native_assets required define SdkRoot but it was not provided
+Syncing files to device iPhone...                                  195ms
+
+Flutter run key commands.
+r Hot reload. 🔥🔥🔥
+R Hot restart.
+h List all available interactive commands.
+d Detach (terminate "flutter run" but leave application running).
+c Clear the screen
+q Quit (terminate the application on the device).
+
+A Dart VM Service on iPhone is available at: http://127.0.0.1:52299/dB3-lX4JpbM=/
+The Flutter DevTools debugger and profiler on iPhone is available at: http://127.0.0.1:52299/dB3-lX4JpbM=/devtools/?uri=ws://127.0.0.1:52299/dB3-lX4JpbM=/ws
+Lost connection to device.
