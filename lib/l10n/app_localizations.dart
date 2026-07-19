@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Nestory'**
+  /// **'NestyCraft'**
   String get appTitle;
 
   /// No description provided for @home.
@@ -248,11 +248,35 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get profile;
 
+  /// No description provided for @premiumStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium Status'**
+  String get premiumStatus;
+
+  /// No description provided for @premiumActive.
+  ///
+  /// In en, this message translates to:
+  /// **'All features unlocked'**
+  String get premiumActive;
+
+  /// No description provided for @getPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Premium'**
+  String get getPremium;
+
   /// No description provided for @logout.
   ///
   /// In en, this message translates to:
   /// **'Logout'**
   String get logout;
+
+  /// No description provided for @logoutConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to sign out from your account?'**
+  String get logoutConfirmation;
 
   /// No description provided for @login.
   ///
@@ -632,16 +656,76 @@ abstract class AppLocalizations {
   /// **'Pending'**
   String get pendingOrders;
 
-  /// No description provided for @totalRevenue.
+  /// No description provided for @totalIncome.
   ///
   /// In en, this message translates to:
-  /// **'Total Revenue'**
-  String get totalRevenue;
+  /// **'Total Income'**
+  String get totalIncome;
+
+  /// No description provided for @totalExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Expenses'**
+  String get totalExpenses;
+
+  /// No description provided for @netProfit.
+  ///
+  /// In en, this message translates to:
+  /// **'Net Profit'**
+  String get netProfit;
+
+  /// No description provided for @revenueOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'From Projects'**
+  String get revenueOrders;
+
+  /// No description provided for @revenueEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'From Events'**
+  String get revenueEvents;
+
+  /// No description provided for @eventHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Event History'**
+  String get eventHistory;
+
+  /// No description provided for @noEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'No finished events yet.'**
+  String get noEvents;
+
+  /// No description provided for @revenue.
+  ///
+  /// In en, this message translates to:
+  /// **'Revenue'**
+  String get revenue;
+
+  /// No description provided for @expenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get expenses;
+
+  /// No description provided for @itemsSold.
+  ///
+  /// In en, this message translates to:
+  /// **'Items sold'**
+  String get itemsSold;
+
+  /// No description provided for @noInventory.
+  ///
+  /// In en, this message translates to:
+  /// **'No items in inventory'**
+  String get noInventory;
 
   /// No description provided for @statsComingSoon.
   ///
   /// In en, this message translates to:
-  /// **'Charts of your creations coming soon!'**
+  /// **'Charts coming soon!'**
   String get statsComingSoon;
 
   /// No description provided for @forCustomer.

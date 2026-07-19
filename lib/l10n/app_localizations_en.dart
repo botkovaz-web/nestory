@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Nestory';
+  String get appTitle => 'NestyCraft';
 
   @override
   String get home => 'Home';
@@ -91,7 +91,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile => 'Profile';
 
   @override
+  String get premiumStatus => 'Premium Status';
+
+  @override
+  String get premiumActive => 'All features unlocked';
+
+  @override
+  String get getPremium => 'Get Premium';
+
+  @override
   String get logout => 'Logout';
+
+  @override
+  String get logoutConfirmation =>
+      'Are you sure you want to sign out from your account?';
 
   @override
   String get login => 'Login';
@@ -284,10 +297,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pendingOrders => 'Pending';
 
   @override
-  String get totalRevenue => 'Total Revenue';
+  String get totalIncome => 'Total Income';
 
   @override
-  String get statsComingSoon => 'Charts of your creations coming soon!';
+  String get totalExpenses => 'Total Expenses';
+
+  @override
+  String get netProfit => 'Net Profit';
+
+  @override
+  String get revenueOrders => 'From Projects';
+
+  @override
+  String get revenueEvents => 'From Events';
+
+  @override
+  String get eventHistory => 'Event History';
+
+  @override
+  String get noEvents => 'No finished events yet.';
+
+  @override
+  String get revenue => 'Revenue';
+
+  @override
+  String get expenses => 'Expenses';
+
+  @override
+  String get itemsSold => 'Items sold';
+
+  @override
+  String get noInventory => 'No items in inventory';
+
+  @override
+  String get statsComingSoon => 'Charts coming soon!';
 
   @override
   String get forCustomer => 'For Customer';

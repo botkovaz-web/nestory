@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../l10n/app_localizations.dart';
 
 class MaterialModel {
   final String id;
@@ -20,6 +21,30 @@ class MaterialModel {
     this.note = '',
     this.updatedAt,
   });
+
+  String getLocalizedCategory(AppLocalizations l10n) {
+    switch (category) {
+      case 'Priadze': return l10n.catYarns;
+      case 'Korálky': return l10n.catBeads;
+      case 'Papiere': return l10n.catPapers;
+      case 'Látky': return l10n.catFabrics;
+      case 'Iné': return l10n.catOther;
+      default: return category;
+    }
+  }
+
+  String getLocalizedUnit(AppLocalizations l10n) {
+    switch (unit) {
+      case 'ks': return l10n.unitPcs;
+      case 'g': return l10n.unitGrams;
+      case 'kg': return l10n.unitKg;
+      case 'm': return l10n.unitMeters;
+      case 'klbka': return l10n.unitBalls;
+      case 'hárky': return l10n.unitSheets;
+      case 'balenia': return l10n.unitPacks;
+      default: return unit;
+    }
+  }
 
   factory MaterialModel.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map<String, dynamic>;

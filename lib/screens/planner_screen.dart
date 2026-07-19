@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/intl.dart';
 import '../app_colors.dart';
 import '../models/event_model.dart';
 import '../models/project_model.dart';
@@ -7,10 +8,16 @@ import '../models/material_model.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/add_entry_dialog.dart';
 import '../widgets/nestory_card.dart';
+import '../widgets/detail_entry_dialog.dart';
+import '../widgets/nestory_fab.dart';
+import '../widgets/nestory_counter.dart';
+import '../widgets/nestory_chip_selection.dart';
+import '../widgets/app_bar_actions.dart';
 import '../services/database_service.dart';
 
 class PlannerScreen extends StatefulWidget {
-  const PlannerScreen({super.key});
+  final Function(int, {int subTab}) onNavigate;
+  const PlannerScreen({super.key, required this.onNavigate});
 
   @override
   State<PlannerScreen> createState() => _PlannerScreenState();
@@ -29,13 +36,57 @@ class _PlannerScreenState extends State<PlannerScreen> {
     _selectedDay = _focusedDay;
   }
 
+  void _showEventDetailDialog(EventModel event) {
+    final l10n = AppLocalizations.of(context)!;
+    double profit = event.sales - event.expenses;
+
+    showDialog(
+      context: context,
+      builder: (context) => DetailEntryDialog(
+        title: event.title,
+        onEdit: () { Navigator.pop(context); _showAddEventDialog(event); },
+        onDelete: () => _dbService.deleteEvent(event.id),
+        children: [
+          DetailEntryDialog.buildDetailRow(Icons.calendar_today_outlined, l10n.deadline, DateFormat('dd.MM.yyyy').format(event.date)),
+          if (event.location.isNotEmpty) DetailEntryDialog.buildDetailRow(Icons.location_on_outlined, l10n.location, event.location),
+          const Divider(height: 24),
+          DetailEntryDialog.buildDetailRow(Icons.euro_outlined, l10n.revenue, '${event.sales.toStringAsFixed(2)} €'),
+          DetailEntryDialog.buildDetailRow(Icons.trending_down_outlined, l10n.expenses, '${event.expenses.toStringAsFixed(2)} €'),
+          DetailEntryDialog.buildDetailRow(Icons.account_balance_wallet_outlined, 'Čistý zisk', '${profit.toStringAsFixed(2)} €', valueColor: profit >= 0 ? Colors.green : Colors.red),
+          const SizedBox(height: 16),
+          Text(l10n.inventoryToTake, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.blueGrey)),
+          const SizedBox(height: 8),
+          if (event.inventory.isEmpty) Text(l10n.noInventory, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+          ...event.inventory.entries.map((item) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(item.key, style: const TextStyle(fontSize: 13)),
+                Text('${item.value['sold']} / ${item.value['taken']}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+              ],
+            ),
+          )).toList(),
+          if (event.description.isNotEmpty) ...[
+            const Divider(height: 24),
+            Text(l10n.note, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.blueGrey)),
+            Text(event.description, style: const TextStyle(fontSize: 13)),
+          ],
+        ],
+      ),
+    );
+  }
+
   Future<void> _showAddEventDialog([EventModel? event]) async {
     final l10n = AppLocalizations.of(context)!;
     final titleController = TextEditingController(text: event?.title ?? '');
     final descController = TextEditingController(text: event?.description ?? '');
     final locController = TextEditingController(text: event?.location ?? '');
+    final salesController = TextEditingController(text: event?.sales.toString() ?? '0.0');
+    final expensesController = TextEditingController(text: event?.expenses.toString() ?? '0.0');
+    
     DateTime selectedDate = event?.date ?? _selectedDay ?? DateTime.now();
-    List<String> selectedInventory = List.from(event?.inventoryItems ?? []);
+    Map<String, Map<String, int>> currentInventory = Map.from(event?.inventory ?? {});
 
     await showDialog(
       context: context,
@@ -44,21 +95,14 @@ class _PlannerScreenState extends State<PlannerScreen> {
           title: event == null ? '${l10n.add} ${l10n.event.toLowerCase()}' : '${l10n.edit} ${l10n.event.toLowerCase()}',
           onSave: () async {
             if (titleController.text.isEmpty) return;
-            final eventData = EventModel(
-              id: event?.id ?? '',
-              title: titleController.text.trim(),
-              description: descController.text.trim(),
-              location: locController.text.trim(),
-              inventoryItems: selectedInventory,
-              date: selectedDate,
-              type: 'event',
+            final data = EventModel(
+              id: event?.id ?? '', title: titleController.text.trim(), description: descController.text.trim(),
+              location: locController.text.trim(), inventory: currentInventory,
+              sales: double.tryParse(salesController.text) ?? 0.0, expenses: double.tryParse(expensesController.text) ?? 0.0,
+              date: selectedDate, type: 'event',
             ).toMap();
 
-            if (event == null) {
-              await _dbService.addEvent(eventData);
-            } else {
-              await _dbService.updateEvent(event.id, eventData);
-            }
+            event == null ? await _dbService.addEvent(data) : await _dbService.updateEvent(event.id, data);
             if (mounted) Navigator.pop(context);
           },
           content: Column(
@@ -67,12 +111,16 @@ class _PlannerScreenState extends State<PlannerScreen> {
               const SizedBox(height: 8),
               TextField(controller: locController, decoration: InputDecoration(labelText: l10n.location)),
               const SizedBox(height: 8),
-              TextField(controller: descController, decoration: InputDecoration(labelText: l10n.note), maxLines: 2),
+              Row(children: [
+                Expanded(child: TextField(controller: salesController, decoration: InputDecoration(labelText: '${l10n.revenue} (€)'), keyboardType: TextInputType.number)),
+                const SizedBox(width: 16),
+                Expanded(child: TextField(controller: expensesController, decoration: InputDecoration(labelText: '${l10n.expenses} (€)'), keyboardType: TextInputType.number)),
+              ]),
               const SizedBox(height: 16),
               const Divider(),
-              Text(l10n.inventoryToTake, style: const TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              _buildInventorySelection(selected: selectedInventory, onChanged: (list) => setDialogState(() => selectedInventory = list)),
+              _buildInventoryManager(l10n, currentInventory, () => setDialogState(() {})),
+              const SizedBox(height: 16),
+              TextField(controller: descController, decoration: InputDecoration(labelText: l10n.note), maxLines: 2),
             ],
           ),
         ),
@@ -80,37 +128,53 @@ class _PlannerScreenState extends State<PlannerScreen> {
     );
   }
 
-  Widget _buildInventorySelection({required List<String> selected, required Function(List<String>) onChanged}) {
-    return StreamBuilder<List<MaterialModel>>(
-      stream: _dbService.materials,
-      builder: (context, materialSnap) {
-        return StreamBuilder<List<ProjectModel>>(
-          stream: _dbService.projects,
-          builder: (context, projectSnap) {
-            List<String> allItems = [];
-            if (materialSnap.hasData) allItems.addAll(materialSnap.data!.map((m) => m.name));
-            if (projectSnap.hasData) allItems.addAll(projectSnap.data!.map((p) => p.name));
-            if (allItems.isEmpty) return const SizedBox();
-            return Wrap(spacing: 4, children: allItems.map((name) {
-              final isSel = selected.contains(name);
-              return FilterChip(label: Text(name, style: const TextStyle(fontSize: 11)), selected: isSel, onSelected: (s) {
-                final newList = List<String>.from(selected);
-                s ? newList.add(name) : newList.remove(name);
-                onChanged(newList);
-              }, padding: EdgeInsets.zero);
-            }).toList());
-          },
-        );
-      },
-    );
+  Widget _buildInventoryManager(AppLocalizations l10n, Map<String, Map<String, int>> currentInventory, VoidCallback onChanged) {
+    return Column(children: [
+      Text(l10n.inventoryToTake, style: const TextStyle(fontWeight: FontWeight.bold)),
+      const SizedBox(height: 8),
+      StreamBuilder<List<ProjectModel>>(
+        stream: _dbService.projects,
+        builder: (context, snapshot) {
+          return NestoryChipSelection(
+            title: '',
+            allItems: snapshot.hasData ? snapshot.data!.map((p) => p.name).toList() : [],
+            selectedItems: currentInventory.keys.toList(),
+            onChanged: (list) {
+              final newList = Map<String, Map<String, int>>.from(currentInventory);
+              for (var name in list) { if (!newList.containsKey(name)) newList[name] = {'taken': 1, 'sold': 0}; }
+              newList.removeWhere((key, _) => !list.contains(key));
+              currentInventory.clear(); currentInventory.addAll(newList);
+              onChanged();
+            },
+          );
+        },
+      ),
+      const SizedBox(height: 12),
+      ...currentInventory.entries.map((entry) => Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Row(children: [
+          Expanded(child: Text(entry.key, style: const TextStyle(fontSize: 13))),
+          NestoryCounter(label: 'Vzaté', value: entry.value['taken']!, onAdd: () { entry.value['taken'] = entry.value['taken']! + 1; onChanged(); }, onSub: () { if (entry.value['taken']! > 0) { entry.value['taken'] = entry.value['taken']! - 1; onChanged(); } }),
+          const SizedBox(width: 8),
+          NestoryCounter(label: 'Predané', value: entry.value['sold']!, color: Colors.green, onAdd: () { if (entry.value['sold']! < entry.value['taken']!) { entry.value['sold'] = entry.value['sold']! + 1; onChanged(); } }, onSub: () { if (entry.value['sold']! > 0) { entry.value['sold'] = entry.value['sold']! - 1; onChanged(); } }),
+        ]),
+      )).toList(),
+    ]);
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.planner), backgroundColor: Colors.transparent, elevation: 0),
-      floatingActionButton: FloatingActionButton(onPressed: () => _showAddEventDialog(), backgroundColor: AppColors.accent, child: const Icon(Icons.add, color: Colors.white)),
+      appBar: AppBar(
+        title: Text(l10n.planner),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          NestoryAppBarActions(onNavigate: widget.onNavigate),
+        ],
+      ),
+      floatingActionButton: NestoryFAB(onPressed: () => _showAddEventDialog()),
       body: StreamBuilder<List<EventModel>>(
         stream: _dbService.events,
         builder: (context, eventSnap) {
@@ -118,20 +182,8 @@ class _PlannerScreenState extends State<PlannerScreen> {
             stream: _dbService.projects,
             builder: (context, projectSnap) {
               _events = {};
-              if (eventSnap.hasData) {
-                for (var event in eventSnap.data!) {
-                  final date = DateTime(event.date.year, event.date.month, event.date.day);
-                  _events[date] = (_events[date] ?? [])..add(event);
-                }
-              }
-              if (projectSnap.hasData) {
-                for (var project in projectSnap.data!) {
-                  if (project.deadline != null) {
-                    final date = DateTime(project.deadline!.year, project.deadline!.month, project.deadline!.day);
-                    _events[date] = (_events[date] ?? [])..add(project);
-                  }
-                }
-              }
+              if (eventSnap.hasData) { for (var e in eventSnap.data!) { _events[DateTime(e.date.year, e.date.month, e.date.day)] = (_events[DateTime(e.date.year, e.date.month, e.date.day)] ?? [])..add(e); } }
+              if (projectSnap.hasData) { for (var p in projectSnap.data!) { if (p.deadline != null) { _events[DateTime(p.deadline!.year, p.deadline!.month, p.deadline!.day)] = (_events[DateTime(p.deadline!.year, p.deadline!.month, p.deadline!.day)] ?? [])..add(p); } } }
               final selectedEvents = _events[DateTime(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day)] ?? [];
               return Column(children: [
                 TableCalendar(
@@ -151,11 +203,7 @@ class _PlannerScreenState extends State<PlannerScreen> {
                   } else if (item is ProjectModel) {
                     title = '${l10n.projects}: ${item.name}'; type = l10n.term; icon = Icons.palette; color = Colors.blue;
                   }
-                  return NestoryCard(
-                    leading: Icon(icon, color: color), title: title, subtitle: Text(subtitle ?? type),
-                    trailing: item is EventModel ? IconButton(icon: const Icon(Icons.delete, size: 20), onPressed: () => _dbService.deleteEvent(item.id)) : null,
-                    onTap: item is EventModel ? () => _showAddEventDialog(item) : null,
-                  );
+                  return NestoryCard(leading: Icon(icon, color: color), title: title, subtitle: Text(subtitle ?? type), onTap: item is EventModel ? () => _showEventDetailDialog(item) : null);
                 })),
               ]);
             },
@@ -164,4 +212,6 @@ class _PlannerScreenState extends State<PlannerScreen> {
       ),
     );
   }
+
+  bool isSameDay(DateTime? a, DateTime b) { return a != null && a.year == b.year && a.month == b.month && a.day == b.day; }
 }

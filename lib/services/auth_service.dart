@@ -21,6 +21,7 @@ class AuthService {
       'uid': result.user!.uid,
       'name': name,
       'email': email,
+      'isPremium': false, // Nový používateľ je v základe free
       'createdAt': FieldValue.serverTimestamp(),
     });
     

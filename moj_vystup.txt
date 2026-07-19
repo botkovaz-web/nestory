@@ -1,13 +1,15 @@
 Launching lib/main.dart on iPhone in debug mode...
 Automatically signing iOS for device deployment using specified development team in Xcode project: QPG4QKHKZ8
 Running Xcode build...                                          
-Xcode build done.                                           36,8s
+Xcode build done.                                           32,8s
 Installing and launching...                                     
-objc[24321]: Class FileUtils is implemented in both /System/Library/PrivateFrameworks/OSAnalytics.framework/OSAnalytics (0x1fe8e9068) and /private/var/containers/Bundle/Application/B112000C-AE82-4BC1-93FC-15FD4C264A54/Runner.app/Frameworks/file_picker.framework/file_picker (0x100d22300). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
-Installing and launching...                                        42,5s
- This typically indicates that your device does not have a healthy Internet connection at the moment. The client will operate in offline mode until it is able to successfully connect to the backend.
+objc[5801]: Class FileUtils is implemented in both /System/Library/PrivateFrameworks/OSAnalytics.framework/OSAnalytics (0x2059cd068) and /private/var/containers/Bundle/Application/70AE91EC-EF7B-49B7-AA9E-566739E7860D/Runner.app/Frameworks/file_picker.framework/file_picker (0x102fd6300). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+Installing and launching...                                        40,8s
+flutter: RevenueCat Update: isPremium = true pre UID: n4BEu1MtruVZ1YyfCGvl3xE6f8u1
+flutter: Prihlasujem používateľa do RevenueCat: n4BEu1MtruVZ1YyfCGvl3xE6f8u1
+ attributes: ["$attConsentStatus": [SubscriberAttribute] key: $attConsentStatus value: notDetermined setTime: 2026-07-18 22:01:11 +0000]
 Target native_assets required define SdkRoot but it was not provided
-Syncing files to device iPhone...                                  195ms
+Syncing files to device iPhone...                                  172ms
 
 Flutter run key commands.
 r Hot reload. 🔥🔥🔥
@@ -17,6 +19,6 @@ d Detach (terminate "flutter run" but leave application running).
 c Clear the screen
 q Quit (terminate the application on the device).
 
-A Dart VM Service on iPhone is available at: http://127.0.0.1:52299/dB3-lX4JpbM=/
-The Flutter DevTools debugger and profiler on iPhone is available at: http://127.0.0.1:52299/dB3-lX4JpbM=/devtools/?uri=ws://127.0.0.1:52299/dB3-lX4JpbM=/ws
+A Dart VM Service on iPhone is available at: http://127.0.0.1:62865/6cmEq4aQU-M=/
+The Flutter DevTools debugger and profiler on iPhone is available at: http://127.0.0.1:62865/6cmEq4aQU-M=/devtools/?uri=ws://127.0.0.1:62865/6cmEq4aQU-M=/ws
 Lost connection to device.

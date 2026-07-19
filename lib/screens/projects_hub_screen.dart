@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import '../app_colors.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/app_bar_actions.dart';
-import 'material_screen.dart';
-import 'tools_screen.dart';
+import 'project_screen.dart';
+import 'guide_screen.dart';
 
-class InventoryScreen extends StatelessWidget {
+class ProjectsHubScreen extends StatelessWidget {
   final int initialTabIndex;
   final Function(int, {int subTab}) onNavigate;
 
-  const InventoryScreen({
+  const ProjectsHubScreen({
     super.key,
     this.initialTabIndex = 0,
     required this.onNavigate,
@@ -24,7 +24,7 @@ class InventoryScreen extends StatelessWidget {
       initialIndex: initialTabIndex,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(l10n.inventory),
+          title: Text(l10n.projects),
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
@@ -35,15 +35,15 @@ class InventoryScreen extends StatelessWidget {
             labelColor: AppColors.accent,
             unselectedLabelColor: Colors.grey,
             tabs: [
-              Tab(text: l10n.material),
-              Tab(text: l10n.tools),
+              Tab(text: l10n.myCreation),
+              Tab(text: l10n.guides),
             ],
           ),
         ),
         body: const TabBarView(
           children: [
-            MaterialScreen(),
-            ToolsScreen(),
+            ProjectScreen(),
+            GuideScreen(),
           ],
         ),
       ),

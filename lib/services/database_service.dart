@@ -10,12 +10,24 @@ class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final String? uid = FirebaseAuth.instance.currentUser?.uid;
 
-  // --- POUŽÍVATEĽ ---
+  // --- POUŽÍVATEĽ & PREMIUM ---
   Stream<DocumentSnapshot> get userData {
     return _db.collection('users').doc(uid).snapshots();
   }
 
-  // --- MATERIÁL ---
+  Stream<bool> get isPremium {
+    return _db.collection('users').doc(uid).snapshots().map((snap) {
+      if (!snap.exists) return false;
+      return (snap.data() as Map<String, dynamic>)['isPremium'] ?? false;
+    });
+  }
+
+  // Zmena stavu Premium (volané po úspešnom nákupe)
+  Future<void> updatePremiumStatus(bool status) async {
+    await _db.collection('users').doc(uid).update({'isPremium': status});
+  }
+
+  // --- MATERIÁL & POMÔCKY ---
   Stream<List<MaterialModel>> get materials {
     return _db.collection('users').doc(uid).collection('materials')
       .orderBy('updatedAt', descending: true)
@@ -23,19 +35,10 @@ class DatabaseService {
       .map((snap) => snap.docs.map((doc) => MaterialModel.fromFirestore(doc)).toList());
   }
 
-  Future<void> addMaterial(Map<String, dynamic> data) async {
-    await _db.collection('users').doc(uid).collection('materials').add(data);
-  }
+  Future<void> addMaterial(Map<String, dynamic> data) async => await _db.collection('users').doc(uid).collection('materials').add(data);
+  Future<void> updateMaterial(String id, Map<String, dynamic> data) async => await _db.collection('users').doc(uid).collection('materials').doc(id).update(data);
+  Future<void> deleteMaterial(String id) async => await _db.collection('users').doc(uid).collection('materials').doc(id).delete();
 
-  Future<void> updateMaterial(String id, Map<String, dynamic> data) async {
-    await _db.collection('users').doc(uid).collection('materials').doc(id).update(data);
-  }
-
-  Future<void> deleteMaterial(String id) async {
-    await _db.collection('users').doc(uid).collection('materials').doc(id).delete();
-  }
-
-  // --- POMÔCKY ---
   Stream<List<ToolModel>> get tools {
     return _db.collection('users').doc(uid).collection('tools')
       .orderBy('updatedAt', descending: true)
@@ -43,17 +46,9 @@ class DatabaseService {
       .map((snap) => snap.docs.map((doc) => ToolModel.fromFirestore(doc)).toList());
   }
 
-  Future<void> addTool(Map<String, dynamic> data) async {
-    await _db.collection('users').doc(uid).collection('tools').add(data);
-  }
-
-  Future<void> updateTool(String id, Map<String, dynamic> data) async {
-    await _db.collection('users').doc(uid).collection('tools').doc(id).update(data);
-  }
-
-  Future<void> deleteTool(String id) async {
-    await _db.collection('users').doc(uid).collection('tools').doc(id).delete();
-  }
+  Future<void> addTool(Map<String, dynamic> data) async => await _db.collection('users').doc(uid).collection('tools').add(data);
+  Future<void> updateTool(String id, Map<String, dynamic> data) async => await _db.collection('users').doc(uid).collection('tools').doc(id).update(data);
+  Future<void> deleteTool(String id) async => await _db.collection('users').doc(uid).collection('tools').doc(id).delete();
 
   // --- PROJEKTY ---
   Stream<List<ProjectModel>> get projects {
@@ -70,36 +65,9 @@ class DatabaseService {
       .map((snap) => snap.docs.map((doc) => ProjectModel.fromFirestore(doc)).toList());
   }
 
-  Future<void> addProject(Map<String, dynamic> data) async {
-    await _db.collection('users').doc(uid).collection('projects').add(data);
-  }
-
-  Future<void> updateProject(String id, Map<String, dynamic> data) async {
-    await _db.collection('users').doc(uid).collection('projects').doc(id).update(data);
-  }
-
-  Future<void> deleteProject(String id) async {
-    await _db.collection('users').doc(uid).collection('projects').doc(id).delete();
-  }
-
-  // --- UDALOSTI ---
-  Stream<List<EventModel>> get events {
-    return _db.collection('users').doc(uid).collection('events')
-      .snapshots()
-      .map((snap) => snap.docs.map((doc) => EventModel.fromFirestore(doc)).toList());
-  }
-
-  Future<void> addEvent(Map<String, dynamic> data) async {
-    await _db.collection('users').doc(uid).collection('events').add(data);
-  }
-
-  Future<void> updateEvent(String id, Map<String, dynamic> data) async {
-    await _db.collection('users').doc(uid).collection('events').doc(id).update(data);
-  }
-
-  Future<void> deleteEvent(String id) async {
-    await _db.collection('users').doc(uid).collection('events').doc(id).delete();
-  }
+  Future<void> addProject(Map<String, dynamic> data) async => await _db.collection('users').doc(uid).collection('projects').add(data);
+  Future<void> updateProject(String id, Map<String, dynamic> data) async => await _db.collection('users').doc(uid).collection('projects').doc(id).update(data);
+  Future<void> deleteProject(String id) async => await _db.collection('users').doc(uid).collection('projects').doc(id).delete();
 
   // --- NÁVODY ---
   Stream<List<GuideModel>> get guides {
@@ -109,15 +77,18 @@ class DatabaseService {
       .map((snap) => snap.docs.map((doc) => GuideModel.fromFirestore(doc)).toList());
   }
 
-  Future<void> addGuide(Map<String, dynamic> data) async {
-    await _db.collection('users').doc(uid).collection('guides').add(data);
+  Future<void> addGuide(Map<String, dynamic> data) async => await _db.collection('users').doc(uid).collection('guides').add(data);
+  Future<void> updateGuide(String id, Map<String, dynamic> data) async => await _db.collection('users').doc(uid).collection('guides').doc(id).update(data);
+  Future<void> deleteGuide(String id) async => await _db.collection('users').doc(uid).collection('guides').doc(id).delete();
+
+  // --- UDALOSTI ---
+  Stream<List<EventModel>> get events {
+    return _db.collection('users').doc(uid).collection('events')
+      .snapshots()
+      .map((snap) => snap.docs.map((doc) => EventModel.fromFirestore(doc)).toList());
   }
 
-  Future<void> updateGuide(String id, Map<String, dynamic> data) async {
-    await _db.collection('users').doc(uid).collection('guides').doc(id).update(data);
-  }
-
-  Future<void> deleteGuide(String id) async {
-    await _db.collection('users').doc(uid).collection('guides').doc(id).delete();
-  }
+  Future<void> addEvent(Map<String, dynamic> data) async => await _db.collection('users').doc(uid).collection('events').add(data);
+  Future<void> updateEvent(String id, Map<String, dynamic> data) async => await _db.collection('users').doc(uid).collection('events').doc(id).update(data);
+  Future<void> deleteEvent(String id) async => await _db.collection('users').doc(uid).collection('events').doc(id).delete();
 }

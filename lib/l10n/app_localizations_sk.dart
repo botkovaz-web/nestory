@@ -9,7 +9,7 @@ class AppLocalizationsSk extends AppLocalizations {
   AppLocalizationsSk([String locale = 'sk']) : super(locale);
 
   @override
-  String get appTitle => 'Nestory';
+  String get appTitle => 'NestyCraft';
 
   @override
   String get home => 'Domov';
@@ -89,7 +89,19 @@ class AppLocalizationsSk extends AppLocalizations {
   String get profile => 'Profil';
 
   @override
+  String get premiumStatus => 'Stav Premium';
+
+  @override
+  String get premiumActive => 'Všetky funkcie odomknuté';
+
+  @override
+  String get getPremium => 'Aktivovať Premium';
+
+  @override
   String get logout => 'Odhlásiť sa';
+
+  @override
+  String get logoutConfirmation => 'Naozaj sa chcete odhlásiť zo svojho účtu?';
 
   @override
   String get login => 'Prihlásiť sa';
@@ -282,10 +294,40 @@ class AppLocalizationsSk extends AppLocalizations {
   String get pendingOrders => 'Čakajúce';
 
   @override
-  String get totalRevenue => 'Celkový obrat';
+  String get totalIncome => 'Celkové príjmy';
 
   @override
-  String get statsComingSoon => 'Tu čoskoro pribudnú grafy tvojej tvorby!';
+  String get totalExpenses => 'Celkové náklady';
+
+  @override
+  String get netProfit => 'Čistý zisk';
+
+  @override
+  String get revenueOrders => 'Z projektov';
+
+  @override
+  String get revenueEvents => 'Z akcií';
+
+  @override
+  String get eventHistory => 'História predajných akcií';
+
+  @override
+  String get noEvents => 'Zatiaľ nemáš žiadne ukončené akcie.';
+
+  @override
+  String get revenue => 'Tržba';
+
+  @override
+  String get expenses => 'Náklady';
+
+  @override
+  String get itemsSold => 'Predané položky';
+
+  @override
+  String get noInventory => 'Žiadne položky v inventári';
+
+  @override
+  String get statsComingSoon => 'Tu čoskoro pribudnú grafy!';
 
   @override
   String get forCustomer => 'Pre zákazníka';

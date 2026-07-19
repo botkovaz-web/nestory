@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../l10n/app_localizations.dart';
 
 class ProjectModel {
   final String id;
@@ -9,13 +10,10 @@ class ProjectModel {
   final String status; // 'V pláne', 'Príprava', 'Vo výrobe', 'Hotovo'
   final DateTime? deadline;
   final String? imageUrl;
-  
-  // Order related fields
   final bool isForCustomer;
   final String? customerName;
   final double price;
   final bool isPaid;
-  
   final DateTime? updatedAt;
 
   ProjectModel({
@@ -33,6 +31,16 @@ class ProjectModel {
     this.isPaid = false,
     this.updatedAt,
   });
+
+  String getLocalizedStatus(AppLocalizations l10n) {
+    switch (status) {
+      case 'V pláne': return l10n.statusPlanning;
+      case 'Príprava': return l10n.statusPreparation;
+      case 'Vo výrobe': return l10n.statusProduction;
+      case 'Hotovo': return l10n.statusDone;
+      default: return status;
+    }
+  }
 
   factory ProjectModel.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map<String, dynamic>;
