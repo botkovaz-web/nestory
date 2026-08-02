@@ -6,6 +6,9 @@ class AppColors {
   
   // Hlavná farba pre tlačidlá (jemná zelená)
   static const Color accent = Color(0xFFA8B49A);
+
+  // Tmavšia olivová pre lepšie vyznačený aktívny stav
+  static const Color oliveDark = Color(0xFF6B7B5C);
   
   // Tu si môžeš v budúcnosti pridávať ďalšie farby
   static const Color primary = Colors.deepPurple;

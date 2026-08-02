@@ -83,8 +83,8 @@ class NestoryApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('sk'),
         Locale('en'),
+        Locale('sk'),
       ],
       home: const AuthWrapper(),
     );
