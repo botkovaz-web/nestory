@@ -35,6 +35,10 @@ class DatabaseService {
     await userDoc.update({'isPremium': status});
   }
 
+  Future<void> completeOnboarding() async {
+    await userDoc.set({'hasSeenOnboarding': true}, SetOptions(merge: true));
+  }
+
   // --- MATERIÁL & POMÔCKY ---
   Stream<List<MaterialModel>> get materials {
     return userDoc.collection('materials')

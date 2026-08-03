@@ -18,8 +18,6 @@ class StatsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.stats),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         actions: [
           NestoryAppBarActions(onNavigate: onNavigate),
         ],
@@ -32,7 +30,7 @@ class StatsScreen extends StatelessWidget {
           }
           
           if (!snapshot.hasData) {
-            return const Center(child: Text('Žiadne dáta k dispozícii.'));
+            return Center(child: Text(l10n.noData));
           }
 
           final stats = snapshot.data!;
@@ -43,17 +41,23 @@ class StatsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // HLAVNÝ SÚHRN
-                _buildSummaryCard(l10n, stats.totalIncome, stats.totalExpenses, stats.netProfit),
+                _buildSummaryCard(context, l10n, stats.totalIncome, stats.totalExpenses, stats.netProfit),
                 const SizedBox(height: 24),
                 
                 // ROZPIS PRÍJMOV
-                Text('Zdroje príjmov', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
+                Text(
+                  l10n.revenueSources, 
+                  style: const TextStyle(
+                    fontSize: 16, 
+                    fontWeight: FontWeight.bold, 
+                  )
+                ),
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    Expanded(child: _buildSmallStatCard(l10n.revenueOrders, stats.projectRevenue, Icons.shopping_bag_outlined, Colors.blue)),
+                    Expanded(child: _buildSmallStatCard(context, l10n.revenueOrders, stats.projectRevenue, Icons.shopping_bag_outlined, Colors.blue)),
                     const SizedBox(width: 12),
-                    Expanded(child: _buildSmallStatCard(l10n.revenueEvents, stats.eventSales, Icons.festival_outlined, Colors.orange)),
+                    Expanded(child: _buildSmallStatCard(context, l10n.revenueEvents, stats.eventSales, Icons.festival_outlined, Colors.orange)),
                   ],
                 ),
                 
@@ -76,17 +80,23 @@ class StatsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryCard(AppLocalizations l10n, double income, double expenses, double profit) {
+  Widget _buildSummaryCard(BuildContext context, AppLocalizations l10n, double income, double expenses, double profit) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
+    // Dynamická farba pre hlavnú kartu - olivová v svetlom, terakotová v tmavom
+    final mainColor = isDark ? AppColors.terracotta : AppColors.accent;
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppColors.accent, AppColors.accent.withOpacity(0.8)],
+          colors: [mainColor, mainColor.withOpacity(0.8)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(25),
-        boxShadow: [BoxShadow(color: AppColors.accent.withAlpha(50), blurRadius: 15, offset: const Offset(0, 8))],
+        boxShadow: [BoxShadow(color: mainColor.withAlpha(50), blurRadius: 15, offset: const Offset(0, 8))],
       ),
       child: Column(
         children: [
@@ -119,13 +129,15 @@ class StatsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSmallStatCard(String title, double value, IconData icon, Color color) {
+  Widget _buildSmallStatCard(BuildContext context, String title, double value, IconData icon, Color color) {
+    final theme = Theme.of(context);
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha(180),
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withAlpha(40)),
+        border: Border.all(color: color.withAlpha(theme.brightness == Brightness.dark ? 80 : 40)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +145,13 @@ class StatsScreen extends StatelessWidget {
           Icon(icon, size: 20, color: color),
           const SizedBox(height: 12),
           Text(title, style: const TextStyle(fontSize: 11, color: Colors.grey)),
-          Text('${value.toStringAsFixed(2)} €', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+          Text(
+            '${value.toStringAsFixed(2)} €', 
+            style: const TextStyle(
+              fontSize: 15, 
+              fontWeight: FontWeight.bold, 
+            )
+          ),
         ],
       ),
     );
@@ -141,20 +159,27 @@ class StatsScreen extends StatelessWidget {
 
   Widget _buildEventExpansionCard(BuildContext context, EventModel event) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     double profit = event.sales - event.expenses;
     
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha(180),
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(15),
       ),
       child: ExpansionTile(
         shape: const RoundedRectangleBorder(side: BorderSide.none),
         collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
         leading: const Icon(Icons.festival, color: Colors.orange),
-        title: Text(event.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(DateFormat('dd.MM.yyyy').format(event.date), style: const TextStyle(fontSize: 12)),
+        title: Text(
+          event.title, 
+          style: const TextStyle(fontWeight: FontWeight.bold)
+        ),
+        subtitle: Text(
+          DateFormat('dd.MM.yyyy').format(event.date), 
+          style: const TextStyle(fontSize: 12)
+        ),
         trailing: Text(
           '${profit >= 0 ? '+' : ''}${profit.toStringAsFixed(2)} €',
           style: TextStyle(
@@ -169,12 +194,19 @@ class StatsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Divider(),
-                _buildDetailRow(l10n.revenue, '${event.sales.toStringAsFixed(2)} €'),
-                _buildDetailRow(l10n.totalExpenses, '${event.expenses.toStringAsFixed(2)} €'),
-                _buildDetailRow('Čistý zisk', '${profit.toStringAsFixed(2)} €', color: profit >= 0 ? Colors.green : Colors.red),
-                if (event.location.isNotEmpty) _buildDetailRow(l10n.location, event.location),
+                _buildDetailRow(context, l10n.revenue, '${event.sales.toStringAsFixed(2)} €'),
+                _buildDetailRow(context, l10n.totalExpenses, '${event.expenses.toStringAsFixed(2)} €'),
+                _buildDetailRow(context, l10n.netProfit, '${profit.toStringAsFixed(2)} €', color: profit >= 0 ? Colors.green : Colors.red),
+                if (event.location.isNotEmpty) _buildDetailRow(context, l10n.location, event.location),
                 const SizedBox(height: 12),
-                Text('${l10n.itemsSold}:', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
+                Text(
+                  '${l10n.itemsSold}:', 
+                  style: TextStyle(
+                    fontSize: 12, 
+                    fontWeight: FontWeight.bold, 
+                    color: theme.colorScheme.onSurface.withAlpha(200)
+                  )
+                ),
                 const SizedBox(height: 4),
                 if (event.inventory.isEmpty)
                   Text(l10n.noInventory, style: const TextStyle(fontSize: 11, color: Colors.grey)),
@@ -183,7 +215,10 @@ class StatsScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(item.key, style: const TextStyle(fontSize: 12)),
+                      Text(
+                        item.key, 
+                        style: const TextStyle(fontSize: 12)
+                      ),
                       Text(
                         '${item.value['sold']} / ${item.value['taken']}',
                         style: TextStyle(
@@ -203,7 +238,7 @@ class StatsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow(String label, String value, {Color? color}) {
+  Widget _buildDetailRow(BuildContext context, String label, String value, {Color? color}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2.0),
       child: Row(

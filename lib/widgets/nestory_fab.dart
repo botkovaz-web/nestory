@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../app_colors.dart';
 
 class NestoryFAB extends StatelessWidget {
   final VoidCallback onPressed;
@@ -15,10 +14,10 @@ class NestoryFAB extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Teraz sa farba berie automaticky z témy
     return FloatingActionButton(
       heroTag: heroTag,
       onPressed: onPressed,
-      backgroundColor: AppColors.accent,
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Icon(icon, color: Colors.white),

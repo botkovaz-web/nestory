@@ -4,12 +4,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'l10n/app_localizations.dart';
-import 'app_colors.dart';
+import 'app_theme.dart';
 import 'screens/main_navigation.dart';
 import 'screens/login_screen.dart';
+import 'screens/onboarding_screen.dart';
 import 'secrets.dart';
 import 'services/database_service.dart';
+
+// Globálny ovládač témy
+final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.system);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,52 +46,31 @@ class NestoryApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'NestyCraft',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
-        useMaterial3: true,
-        scaffoldBackgroundColor: AppColors.background,
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: Colors.white.withAlpha(128),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.grey),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.grey.shade400),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColors.primary, width: 2),
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.accent,
-            foregroundColor: Colors.white,
-            minimumSize: const Size(300, 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            elevation: 0,
-          ),
-        ),
-      ),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en'),
-        Locale('sk'),
-      ],
-      home: const AuthWrapper(),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeNotifier,
+      builder: (_, ThemeMode currentMode, __) {
+        return MaterialApp(
+          title: 'NestyCraft',
+          debugShowCheckedModeBanner: false,
+          
+          // Dynamické témy
+          themeMode: currentMode, 
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en'),
+            Locale('sk'),
+          ],
+          home: const AuthWrapper(),
+        );
+      }
     );
   }
 }
@@ -105,7 +89,6 @@ class _AuthWrapperState extends State<AuthWrapper> {
     _setupPurchaseListener();
   }
 
-  // Sledujeme zmeny v predplatnom a synchronizujeme s Firebase
   void _setupPurchaseListener() {
     Purchases.addCustomerInfoUpdateListener((customerInfo) async {
       final user = FirebaseAuth.instance.currentUser;
@@ -121,16 +104,36 @@ class _AuthWrapperState extends State<AuthWrapper> {
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+      builder: (context, authSnapshot) {
+        if (authSnapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(body: Center(child: CircularProgressIndicator()));
         }
         
-        if (snapshot.hasData) {
-          final uid = snapshot.data!.uid;
+        if (authSnapshot.hasData) {
+          final uid = authSnapshot.data!.uid;
           debugPrint('Prihlasujem používateľa do RevenueCat: $uid');
           Purchases.logIn(uid);
-          return const MainNavigation();
+
+          // Kontrola onboardingu cez Firestore
+          return StreamBuilder<DocumentSnapshot>(
+            stream: DatabaseService().userData,
+            builder: (context, userSnapshot) {
+              if (userSnapshot.connectionState == ConnectionState.waiting) {
+                return const Scaffold(body: Center(child: CircularProgressIndicator()));
+              }
+
+              final data = userSnapshot.data?.data() as Map<String, dynamic>?;
+              final hasSeenOnboarding = data?['hasSeenOnboarding'] ?? false;
+
+              if (!hasSeenOnboarding) {
+                return OnboardingScreen(onDone: () {
+                  setState(() {}); // Prekreslenie po dokončení
+                });
+              }
+
+              return const MainNavigation();
+            },
+          );
         } else {
           Purchases.logOut();
           return const LoginScreen();

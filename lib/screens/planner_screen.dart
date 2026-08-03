@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import '../app_colors.dart';
 import '../models/event_model.dart';
 import '../models/project_model.dart';
-import '../models/material_model.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/add_entry_dialog.dart';
 import '../widgets/nestory_card.dart';
@@ -38,6 +37,7 @@ class _PlannerScreenState extends State<PlannerScreen> {
 
   void _showEventDetailDialog(EventModel event) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     double profit = event.sales - event.expenses;
 
     showDialog(
@@ -52,9 +52,15 @@ class _PlannerScreenState extends State<PlannerScreen> {
           const Divider(height: 24),
           DetailEntryDialog.buildDetailRow(Icons.euro_outlined, l10n.revenue, '${event.sales.toStringAsFixed(2)} €'),
           DetailEntryDialog.buildDetailRow(Icons.trending_down_outlined, l10n.expenses, '${event.expenses.toStringAsFixed(2)} €'),
-          DetailEntryDialog.buildDetailRow(Icons.account_balance_wallet_outlined, 'Čistý zisk', '${profit.toStringAsFixed(2)} €', valueColor: profit >= 0 ? Colors.green : Colors.red),
+          DetailEntryDialog.buildDetailRow(Icons.account_balance_wallet_outlined, l10n.netProfit, '${profit.toStringAsFixed(2)} €', valueColor: profit >= 0 ? Colors.green : Colors.red),
           const SizedBox(height: 16),
-          Text(l10n.inventoryToTake, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.blueGrey)),
+          Text(
+            l10n.inventoryToTake, 
+            style: const TextStyle(
+              fontWeight: FontWeight.bold, 
+              fontSize: 13, 
+            )
+          ),
           const SizedBox(height: 8),
           if (event.inventory.isEmpty) Text(l10n.noInventory, style: const TextStyle(fontSize: 12, color: Colors.grey)),
           ...event.inventory.entries.map((item) => Padding(
@@ -69,7 +75,13 @@ class _PlannerScreenState extends State<PlannerScreen> {
           )).toList(),
           if (event.description.isNotEmpty) ...[
             const Divider(height: 24),
-            Text(l10n.note, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.blueGrey)),
+            Text(
+              l10n.note, 
+              style: const TextStyle(
+                fontWeight: FontWeight.bold, 
+                fontSize: 13, 
+              )
+            ),
             Text(event.description, style: const TextStyle(fontSize: 13)),
           ],
         ],
@@ -92,7 +104,7 @@ class _PlannerScreenState extends State<PlannerScreen> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AddEntryDialog(
-          title: event == null ? '${l10n.add} ${l10n.event.toLowerCase()}' : '${l10n.edit} ${l10n.event.toLowerCase()}',
+          title: event == null ? l10n.addEvent : l10n.editEvent,
           onSave: () async {
             if (titleController.text.isEmpty) return;
             final data = EventModel(
@@ -154,9 +166,9 @@ class _PlannerScreenState extends State<PlannerScreen> {
         padding: const EdgeInsets.only(bottom: 8.0),
         child: Row(children: [
           Expanded(child: Text(entry.key, style: const TextStyle(fontSize: 13))),
-          NestoryCounter(label: 'Vzaté', value: entry.value['taken']!, onAdd: () { entry.value['taken'] = entry.value['taken']! + 1; onChanged(); }, onSub: () { if (entry.value['taken']! > 0) { entry.value['taken'] = entry.value['taken']! - 1; onChanged(); } }),
+          NestoryCounter(label: l10n.taken, value: entry.value['taken']!, onAdd: () { entry.value['taken'] = entry.value['taken']! + 1; onChanged(); }, onSub: () { if (entry.value['taken']! > 0) { entry.value['taken'] = entry.value['taken']! - 1; onChanged(); } }),
           const SizedBox(width: 8),
-          NestoryCounter(label: 'Predané', value: entry.value['sold']!, color: Colors.green, onAdd: () { if (entry.value['sold']! < entry.value['taken']!) { entry.value['sold'] = entry.value['sold']! + 1; onChanged(); } }, onSub: () { if (entry.value['sold']! > 0) { entry.value['sold'] = entry.value['sold']! - 1; onChanged(); } }),
+          NestoryCounter(label: l10n.sold, value: entry.value['sold']!, color: Colors.green, onAdd: () { if (entry.value['sold']! < entry.value['taken']!) { entry.value['sold'] = entry.value['sold']! + 1; onChanged(); } }, onSub: () { if (entry.value['sold']! > 0) { entry.value['sold'] = entry.value['sold']! - 1; onChanged(); } }),
         ]),
       )).toList(),
     ]);
@@ -165,11 +177,12 @@ class _PlannerScreenState extends State<PlannerScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.planner),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         actions: [
           NestoryAppBarActions(onNavigate: widget.onNavigate),
         ],
@@ -192,7 +205,28 @@ class _PlannerScreenState extends State<PlannerScreen> {
                   onDaySelected: (selectedDay, focusedDay) => setState(() { _selectedDay = selectedDay; _focusedDay = focusedDay; }),
                   onFormatChanged: (format) => setState(() => _calendarFormat = format),
                   eventLoader: (day) => _events[DateTime(day.year, day.month, day.day)] ?? [],
-                  calendarStyle: CalendarStyle(todayDecoration: BoxDecoration(color: AppColors.accent.withAlpha(128), shape: BoxShape.circle), selectedDecoration: const BoxDecoration(color: AppColors.accent, shape: BoxShape.circle), markerDecoration: const BoxDecoration(color: Colors.orange, shape: BoxShape.circle)),
+                  headerStyle: HeaderStyle(
+                    titleTextStyle: TextStyle(color: theme.colorScheme.onSurface, fontSize: 17),
+                    formatButtonTextStyle: TextStyle(color: theme.colorScheme.onSurface),
+                    formatButtonDecoration: BoxDecoration(
+                      border: Border.all(color: isDark ? AppColors.accent : Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    leftChevronIcon: Icon(Icons.chevron_left, color: isDark ? AppColors.accent : Colors.black87),
+                    rightChevronIcon: Icon(Icons.chevron_right, color: isDark ? AppColors.accent : Colors.black87),
+                  ),
+                  daysOfWeekStyle: DaysOfWeekStyle(
+                    weekdayStyle: TextStyle(color: theme.colorScheme.onSurface.withAlpha(150)),
+                    weekendStyle: TextStyle(color: isDark ? Colors.redAccent.withAlpha(200) : Colors.red),
+                  ),
+                  calendarStyle: CalendarStyle(
+                    defaultTextStyle: TextStyle(color: theme.colorScheme.onSurface),
+                    weekendTextStyle: TextStyle(color: isDark ? Colors.redAccent.withAlpha(200) : Colors.red),
+                    outsideTextStyle: const TextStyle(color: Colors.grey),
+                    todayDecoration: BoxDecoration(color: theme.colorScheme.primary.withAlpha(isDark ? 80 : 128), shape: BoxShape.circle), 
+                    selectedDecoration: BoxDecoration(color: theme.colorScheme.primary, shape: BoxShape.circle),
+                    markerDecoration: const BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Expanded(child: ListView.builder(padding: const EdgeInsets.all(16), itemCount: selectedEvents.length, itemBuilder: (context, index) {

@@ -124,6 +124,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planner => 'Planner';
 
   @override
+  String get addEvent => 'Add Event';
+
+  @override
+  String get editEvent => 'Edit Event';
+
+  @override
   String get stats => 'Statistics';
 
   @override
@@ -437,4 +443,112 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appVersion => 'Version';
+
+  @override
+  String get revenueSources => 'Revenue Sources';
+
+  @override
+  String get noData => 'No data available.';
+
+  @override
+  String get taken => 'Taken';
+
+  @override
+  String get sold => 'Sold';
+
+  @override
+  String get enterPasswordToConfirm => 'Enter password to confirm';
+
+  @override
+  String get freeVersion => 'Free Version';
+
+  @override
+  String get purchaseSuccess =>
+      'Congratulations! You are now a Premium creator.';
+
+  @override
+  String get restoreSuccess => 'Subscription successfully restored!';
+
+  @override
+  String get noActiveSubscription => 'No active subscription found.';
+
+  @override
+  String get becomePremiumTitle => 'Become a Premium creator!';
+
+  @override
+  String get becomePremiumDesc =>
+      'Unlock unlimited projects, guide library, market planner, and detailed stats of your growth.';
+
+  @override
+  String get activatePremiumButton => 'Activate Premium for €3.99 / month';
+
+  @override
+  String get maybeLater => 'Maybe later';
+
+  @override
+  String get theme => 'Appearance';
+
+  @override
+  String get light => 'Light';
+
+  @override
+  String get dark => 'Dark';
+
+  @override
+  String get system => 'System';
+
+  @override
+  String get inProgress => 'In progress';
+
+  @override
+  String get itemsInStock => 'Items in stock';
+
+  @override
+  String get upcomingDeadline => 'Upcoming deadline';
+
+  @override
+  String get noDeadlines => 'No upcoming deadlines';
+
+  @override
+  String get quickActions => 'Quick Actions';
+
+  @override
+  String get addEntry => 'Add Entry';
+
+  @override
+  String get onboarding1Title => 'Welcome, Creator!';
+
+  @override
+  String get onboarding1Desc =>
+      'NestyCraft is your personal assistant for handmade creation.';
+
+  @override
+  String get onboarding2Title => 'Studio in your pocket';
+
+  @override
+  String get onboarding2Desc =>
+      'Keep a perfect overview of your materials and tools. Never buy what you already have at home again.';
+
+  @override
+  String get onboarding3Title => 'From idea to finished piece';
+
+  @override
+  String get onboarding3Desc =>
+      'Track your projects, save PDF guides and photos to them. Your creation will finally be organized.';
+
+  @override
+  String get onboarding4Title => 'Plan and grow';
+
+  @override
+  String get onboarding4Desc =>
+      'Prepare for markets, track sales and see your handmade business grow thanks to detailed statistics.';
+
+  @override
+  String get onboardingDone => 'Start creating';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get skip => 'Skip';
 }

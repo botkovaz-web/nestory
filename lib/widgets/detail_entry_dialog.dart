@@ -19,6 +19,7 @@ class DetailEntryDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
 
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -38,7 +39,6 @@ class DetailEntryDialog extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 22),
                 onPressed: () {
-                  // Vnútorný potvrdzovací dialóg pre bezpečnosť
                   showDialog(
                     context: context,
                     builder: (c) => AlertDialog(
@@ -47,9 +47,9 @@ class DetailEntryDialog extends StatelessWidget {
                         TextButton(onPressed: () => Navigator.pop(c), child: Text(l10n.no)),
                         TextButton(
                           onPressed: () {
-                            Navigator.pop(c); // Zavrie potvrdenie
-                            Navigator.pop(context); // Zavrie detail
-                            onDelete(); // Vykoná zmazanie
+                            Navigator.pop(c);
+                            Navigator.pop(context);
+                            onDelete();
                           },
                           child: Text(l10n.yes, style: const TextStyle(color: Colors.red)),
                         ),
@@ -75,32 +75,36 @@ class DetailEntryDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(l10n.cancel.replaceFirst(l10n.cancel[0], l10n.cancel[0].toUpperCase())), // "Zavrieť" alebo podobne
+          child: Text(l10n.cancel.replaceFirst(l10n.cancel[0], l10n.cancel[0].toUpperCase())),
         ),
       ],
     );
   }
 
-  // Pomocný widget pre riadok s informáciou, ktorý budeme volať z obrazoviek
   static Widget buildDetailRow(IconData icon, String label, String value, {Color? valueColor}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 18, color: Colors.grey.shade400),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(label, style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
-                Text(value, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: valueColor)),
-              ],
+    return Builder(builder: (context) {
+      final theme = Theme.of(context);
+      final isDark = theme.brightness == Brightness.dark;
+
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 18, color: isDark ? Colors.white24 : Colors.grey.shade400),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(label, style: TextStyle(fontSize: 11, color: isDark ? Colors.white54 : Colors.grey.shade600)),
+                  Text(value, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: valueColor ?? theme.colorScheme.onSurface)),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 }

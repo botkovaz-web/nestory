@@ -122,6 +122,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get planner => 'Plánovač';
 
   @override
+  String get addEvent => 'Pridať udalosť';
+
+  @override
+  String get editEvent => 'Upraviť udalosť';
+
+  @override
   String get stats => 'Štatistiky';
 
   @override
@@ -434,4 +440,111 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get appVersion => 'Verzia';
+
+  @override
+  String get revenueSources => 'Zdroje príjmov';
+
+  @override
+  String get noData => 'Žiadne dáta k dispozícii.';
+
+  @override
+  String get taken => 'Vzaté';
+
+  @override
+  String get sold => 'Predané';
+
+  @override
+  String get enterPasswordToConfirm => 'Zadajte heslo pre potvrdenie';
+
+  @override
+  String get freeVersion => 'Free Verzia';
+
+  @override
+  String get purchaseSuccess => 'Gratulujeme! Teraz ste Premium tvorcom.';
+
+  @override
+  String get restoreSuccess => 'Predplatné bolo úspešne obnovené!';
+
+  @override
+  String get noActiveSubscription => 'Nenašli sme žiadne aktívne predplatné.';
+
+  @override
+  String get becomePremiumTitle => 'Staň sa Premium tvorcom!';
+
+  @override
+  String get becomePremiumDesc =>
+      'Odomkni si neobmedzené projekty, knižnicu návodov, plánovač jarmokov a detailné štatistiky tvojho rastu.';
+
+  @override
+  String get activatePremiumButton => 'Aktivovať Premium za 3,99 € / mesiac';
+
+  @override
+  String get maybeLater => 'Možno neskôr';
+
+  @override
+  String get theme => 'Vzhľad';
+
+  @override
+  String get light => 'Svetlý';
+
+  @override
+  String get dark => 'Tmavý';
+
+  @override
+  String get system => 'Systémový';
+
+  @override
+  String get inProgress => 'V procese';
+
+  @override
+  String get itemsInStock => 'Položky na sklade';
+
+  @override
+  String get upcomingDeadline => 'Najbližší termín';
+
+  @override
+  String get noDeadlines => 'Žiadne blízke termíny';
+
+  @override
+  String get quickActions => 'Rýchle akcie';
+
+  @override
+  String get addEntry => 'Pridať záznam';
+
+  @override
+  String get onboarding1Title => 'Vitaj, Tvorca!';
+
+  @override
+  String get onboarding1Desc =>
+      'NestyCraft je tvoj osobný asistent pre handmade tvorbu.';
+
+  @override
+  String get onboarding2Title => 'Ateliér vo vrecku';
+
+  @override
+  String get onboarding2Desc =>
+      'Maj dokonalý prehľad o svojom materiáli a pomôckach. Už nikdy nekúpiš to, čo už máš doma.';
+
+  @override
+  String get onboarding3Title => 'Od nápadu k hotovému dielu';
+
+  @override
+  String get onboarding3Desc =>
+      'Sleduj svoje projekty, ukladaj si PDF návody a fotky k nim. Tvoja tvorba bude konečne zorganizovaná.';
+
+  @override
+  String get onboarding4Title => 'Plánuj a rásť';
+
+  @override
+  String get onboarding4Desc =>
+      'Pripravuj sa na trhy, sleduj predaje a uvidíš, ako tvoj handmade biznis rastie vďaka detailným štatistikám.';
+
+  @override
+  String get onboardingDone => 'Začať tvoriť';
+
+  @override
+  String get next => 'Ďalej';
+
+  @override
+  String get skip => 'Preskočiť';
 }

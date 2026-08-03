@@ -314,6 +314,18 @@ abstract class AppLocalizations {
   /// **'Planner'**
   String get planner;
 
+  /// No description provided for @addEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Event'**
+  String get addEvent;
+
+  /// No description provided for @editEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Event'**
+  String get editEvent;
+
   /// No description provided for @stats.
   ///
   /// In en, this message translates to:
@@ -937,6 +949,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Version'**
   String get appVersion;
+
+  /// No description provided for @revenueSources.
+  ///
+  /// In en, this message translates to:
+  /// **'Revenue Sources'**
+  String get revenueSources;
+
+  /// No description provided for @noData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data available.'**
+  String get noData;
+
+  /// No description provided for @taken.
+  ///
+  /// In en, this message translates to:
+  /// **'Taken'**
+  String get taken;
+
+  /// No description provided for @sold.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold'**
+  String get sold;
+
+  /// No description provided for @enterPasswordToConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter password to confirm'**
+  String get enterPasswordToConfirm;
+
+  /// No description provided for @freeVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Free Version'**
+  String get freeVersion;
+
+  /// No description provided for @purchaseSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You are now a Premium creator.'**
+  String get purchaseSuccess;
+
+  /// No description provided for @restoreSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription successfully restored!'**
+  String get restoreSuccess;
+
+  /// No description provided for @noActiveSubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'No active subscription found.'**
+  String get noActiveSubscription;
+
+  /// No description provided for @becomePremiumTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Become a Premium creator!'**
+  String get becomePremiumTitle;
+
+  /// No description provided for @becomePremiumDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock unlimited projects, guide library, market planner, and detailed stats of your growth.'**
+  String get becomePremiumDesc;
+
+  /// No description provided for @activatePremiumButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate Premium for €3.99 / month'**
+  String get activatePremiumButton;
+
+  /// No description provided for @maybeLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Maybe later'**
+  String get maybeLater;
+
+  /// No description provided for @theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get theme;
+
+  /// No description provided for @light.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get light;
+
+  /// No description provided for @dark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get dark;
+
+  /// No description provided for @system.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get system;
+
+  /// No description provided for @inProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get inProgress;
+
+  /// No description provided for @itemsInStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Items in stock'**
+  String get itemsInStock;
+
+  /// No description provided for @upcomingDeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming deadline'**
+  String get upcomingDeadline;
+
+  /// No description provided for @noDeadlines.
+  ///
+  /// In en, this message translates to:
+  /// **'No upcoming deadlines'**
+  String get noDeadlines;
+
+  /// No description provided for @quickActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Actions'**
+  String get quickActions;
+
+  /// No description provided for @addEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Entry'**
+  String get addEntry;
+
+  /// No description provided for @onboarding1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome, Creator!'**
+  String get onboarding1Title;
+
+  /// No description provided for @onboarding1Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'NestyCraft is your personal assistant for handmade creation.'**
+  String get onboarding1Desc;
+
+  /// No description provided for @onboarding2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Studio in your pocket'**
+  String get onboarding2Title;
+
+  /// No description provided for @onboarding2Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep a perfect overview of your materials and tools. Never buy what you already have at home again.'**
+  String get onboarding2Desc;
+
+  /// No description provided for @onboarding3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'From idea to finished piece'**
+  String get onboarding3Title;
+
+  /// No description provided for @onboarding3Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your projects, save PDF guides and photos to them. Your creation will finally be organized.'**
+  String get onboarding3Desc;
+
+  /// No description provided for @onboarding4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan and grow'**
+  String get onboarding4Title;
+
+  /// No description provided for @onboarding4Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Prepare for markets, track sales and see your handmade business grow thanks to detailed statistics.'**
+  String get onboarding4Desc;
+
+  /// No description provided for @onboardingDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Start creating'**
+  String get onboardingDone;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
 }
 
 class _AppLocalizationsDelegate

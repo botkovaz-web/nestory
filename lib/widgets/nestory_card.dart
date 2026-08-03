@@ -20,11 +20,9 @@ class NestoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Teraz si kartu nastaví systém sám podľa aktuálnej témy (AppTheme)
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      elevation: 0,
-      color: Colors.white.withAlpha(180), // Jemne polopriehľadná biela
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: leading,

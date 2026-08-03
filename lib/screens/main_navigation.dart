@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../app_colors.dart';
 import 'home_screen.dart';
 import 'inventory_screen.dart';
 import 'projects_hub_screen.dart';
@@ -42,6 +41,8 @@ class _MainNavigationState extends State<MainNavigation> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     
     final List<Widget> _screens = [
       HomeScreen(onNavigate: _onNavigate), 
@@ -59,19 +60,17 @@ class _MainNavigationState extends State<MainNavigation> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(isDark ? 0.3 : 0.05), 
+              blurRadius: 10
+            )
+          ],
         ),
         child: BottomNavigationBar(
           currentIndex: _selectedIndex > 4 ? 0 : _selectedIndex,
           onTap: (index) => _onNavigate(index),
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: AppColors.oliveDark,
-          unselectedItemColor: Colors.grey.shade400,
-          showUnselectedLabels: true,
-          selectedFontSize: 11,
-          unselectedFontSize: 10,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          // Nastavenia sa teraz automaticky berú z AppTheme (bottomNavigationBarTheme)
           items: [
             BottomNavigationBarItem(icon: const Icon(Icons.dashboard_outlined), activeIcon: const Icon(Icons.dashboard), label: l10n.home),
             BottomNavigationBarItem(icon: const Icon(Icons.inventory_2_outlined), activeIcon: const Icon(Icons.inventory_2), label: l10n.inventory),
