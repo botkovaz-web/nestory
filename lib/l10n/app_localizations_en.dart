@@ -58,7 +58,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get material => 'Material';
 
   @override
+  String get addMaterial => 'Add Material';
+
+  @override
+  String get editMaterial => 'Edit Material';
+
+  @override
   String get tools => 'Tools';
+
+  @override
+  String get tool => 'Tool';
+
+  @override
+  String get addTool => 'Add Tool';
+
+  @override
+  String get editTool => 'Edit Tool';
 
   @override
   String get inventory => 'Inventory';
@@ -73,7 +88,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get projects => 'Projects';
 
   @override
+  String get project => 'Project';
+
+  @override
+  String get addProject => 'Add Project';
+
+  @override
+  String get editProject => 'Edit Project';
+
+  @override
   String get guides => 'Guides';
+
+  @override
+  String get guide => 'Guide';
+
+  @override
+  String get addGuide => 'Add Guide';
+
+  @override
+  String get editGuide => 'Edit Guide';
+
+  @override
+  String get openPdfGuide => 'Open PDF Guide';
+
+  @override
+  String get viewPhotoGuide => 'View Photo Guide';
+
+  @override
+  String get changeFile => 'Change file';
+
+  @override
+  String get selectFile => 'Select file (Photo/PDF)';
 
   @override
   String get planner => 'Planner';
@@ -91,13 +136,53 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile => 'Profile';
 
   @override
+  String get premium => 'Premium';
+
+  @override
   String get premiumStatus => 'Premium Status';
 
   @override
   String get premiumActive => 'All features unlocked';
 
   @override
+  String get premiumActiveDesc => 'Your subscription is active.';
+
+  @override
   String get getPremium => 'Get Premium';
+
+  @override
+  String get premiumBenefit => 'Unlock unlimited guides and stats.';
+
+  @override
+  String get activateMonthly => 'ACTIVATE MONTHLY SUBSCRIPTION';
+
+  @override
+  String get restorePurchases => 'Restore purchases';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get legal => 'Legal';
+
+  @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String get deleteAccountWarning =>
+      'This will permanently delete your account and all your data. This action cannot be undone.';
+
+  @override
+  String get confirmPassword => 'Password for confirmation';
+
+  @override
+  String get deleteAccountError => 'Error deleting account. Check password.';
+
+  @override
+  String get termsAndConditions => 'Terms & Conditions';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
 
   @override
   String get logout => 'Logout';
@@ -128,6 +213,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
+  String get ok => 'OK';
+
+  @override
   String get name => 'Name';
 
   @override
@@ -147,6 +235,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get note => 'Note';
+
+  @override
+  String get lastUpdated => 'Last updated';
 
   @override
   String get noMaterial => 'You don\'t have any material here yet.';
@@ -192,12 +283,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'This will permanently delete your account and all your data. This action cannot be undone.';
 
   @override
-  String get termsAndConditions => 'Terms & Conditions';
-
-  @override
-  String get privacyPolicy => 'Privacy Policy';
-
-  @override
   String get yes => 'Yes';
 
   @override
@@ -229,6 +314,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get catOrganizers => 'Organizers';
+
+  @override
+  String get catCrochet => 'Crochet';
+
+  @override
+  String get catSewing => 'Sewing';
+
+  @override
+  String get catKnitting => 'Knitting';
+
+  @override
+  String get catJewelry => 'Jewelry';
 
   @override
   String get condExcellent => 'Excellent';
@@ -337,4 +434,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get forStock => 'For Stock';
+
+  @override
+  String get appVersion => 'Version';
 }

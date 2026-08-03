@@ -39,7 +39,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
           if (material.note.isNotEmpty)
             DetailEntryDialog.buildDetailRow(Icons.notes_outlined, l10n.note, material.note),
           if (material.updatedAt != null)
-            DetailEntryDialog.buildDetailRow(Icons.history, 'Naposledy', DateFormat('dd.MM.yyyy HH:mm').format(material.updatedAt!)),
+            DetailEntryDialog.buildDetailRow(Icons.history, l10n.lastUpdated, DateFormat('dd.MM.yyyy HH:mm').format(material.updatedAt!)),
         ],
       ),
     );
@@ -58,7 +58,7 @@ class _MaterialScreenState extends State<MaterialScreen> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AddEntryDialog(
-          title: material == null ? '${l10n.add} ${l10n.material.toLowerCase()}' : '${l10n.edit} ${l10n.material.toLowerCase()}',
+          title: material == null ? l10n.addMaterial : l10n.editMaterial,
           onSave: () async {
             if (nameController.text.trim().isEmpty) return;
             final data = MaterialModel(

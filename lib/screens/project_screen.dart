@@ -63,7 +63,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
           if (project.description.isNotEmpty)
             DetailEntryDialog.buildDetailRow(Icons.notes_outlined, l10n.note, project.description),
           if (project.updatedAt != null)
-            DetailEntryDialog.buildDetailRow(Icons.history, 'Naposledy', DateFormat('dd.MM.yyyy HH:mm').format(project.updatedAt!)),
+            DetailEntryDialog.buildDetailRow(Icons.history, l10n.lastUpdated, DateFormat('dd.MM.yyyy HH:mm').format(project.updatedAt!)),
         ],
       ),
     );
@@ -100,7 +100,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
       barrierDismissible: false,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AddEntryDialog(
-          title: project == null ? '${l10n.add} ${l10n.projects.toLowerCase()}' : '${l10n.edit} ${l10n.projects.toLowerCase()}',
+          title: project == null ? l10n.addProject : l10n.editProject,
           isSaving: isSaving,
           onSave: () async {
             if (nameController.text.isEmpty) return;

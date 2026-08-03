@@ -56,7 +56,22 @@ class AppLocalizationsSk extends AppLocalizations {
   String get material => 'Materiál';
 
   @override
+  String get addMaterial => 'Pridať materiál';
+
+  @override
+  String get editMaterial => 'Upraviť materiál';
+
+  @override
   String get tools => 'Pomôcky';
+
+  @override
+  String get tool => 'Pomôcka';
+
+  @override
+  String get addTool => 'Pridať pomôcku';
+
+  @override
+  String get editTool => 'Upraviť pomôcku';
 
   @override
   String get inventory => 'Sklad';
@@ -71,7 +86,37 @@ class AppLocalizationsSk extends AppLocalizations {
   String get projects => 'Projekty';
 
   @override
+  String get project => 'Projekt';
+
+  @override
+  String get addProject => 'Pridať projekt';
+
+  @override
+  String get editProject => 'Upraviť projekt';
+
+  @override
   String get guides => 'Návody';
+
+  @override
+  String get guide => 'Návod';
+
+  @override
+  String get addGuide => 'Pridať návod';
+
+  @override
+  String get editGuide => 'Upraviť návod';
+
+  @override
+  String get openPdfGuide => 'Otvoriť PDF návod';
+
+  @override
+  String get viewPhotoGuide => 'Zobraziť fotku návodu';
+
+  @override
+  String get changeFile => 'Zmeniť súbor';
+
+  @override
+  String get selectFile => 'Vybrať súbor (Foto/PDF)';
 
   @override
   String get planner => 'Plánovač';
@@ -89,13 +134,53 @@ class AppLocalizationsSk extends AppLocalizations {
   String get profile => 'Profil';
 
   @override
+  String get premium => 'Premium';
+
+  @override
   String get premiumStatus => 'Stav Premium';
 
   @override
   String get premiumActive => 'Všetky funkcie odomknuté';
 
   @override
-  String get getPremium => 'Aktivovať Premium';
+  String get premiumActiveDesc => 'Vaše predplatné je aktívne.';
+
+  @override
+  String get getPremium => 'Získať Premium';
+
+  @override
+  String get premiumBenefit => 'Odomknite neobmedzené návody a štatistiky.';
+
+  @override
+  String get activateMonthly => 'AKTIVOVAŤ MESAČNÉ PREDPLATNÉ';
+
+  @override
+  String get restorePurchases => 'Obnoviť nákupy';
+
+  @override
+  String get account => 'Účet';
+
+  @override
+  String get legal => 'Právne informácie';
+
+  @override
+  String get deleteAccount => 'Vymazať účet';
+
+  @override
+  String get deleteAccountWarning =>
+      'Týmto natrvalo odstránite svoj účet a všetky vaše údaje. Túto akciu nie je možné vrátiť späť.';
+
+  @override
+  String get confirmPassword => 'Heslo pre potvrdenie';
+
+  @override
+  String get deleteAccountError => 'Chyba pri mazaní účtu. Skontrolujte heslo.';
+
+  @override
+  String get termsAndConditions => 'Obchodné podmienky';
+
+  @override
+  String get privacyPolicy => 'Ochrana súkromia';
 
   @override
   String get logout => 'Odhlásiť sa';
@@ -125,6 +210,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get cancel => 'Zrušiť';
 
   @override
+  String get ok => 'OK';
+
+  @override
   String get name => 'Názov';
 
   @override
@@ -144,6 +232,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get note => 'Poznámka';
+
+  @override
+  String get lastUpdated => 'Naposledy upravené';
 
   @override
   String get noMaterial => 'Zatiaľ tu nemáš žiadny materiál.';
@@ -189,12 +280,6 @@ class AppLocalizationsSk extends AppLocalizations {
       'Týmto natrvalo odstránite svoj účet a všetky vaše údaje. Túto akciu nie je možné vrátiť späť.';
 
   @override
-  String get termsAndConditions => 'Obchodné podmienky';
-
-  @override
-  String get privacyPolicy => 'Ochrana súkromia';
-
-  @override
   String get yes => 'Áno';
 
   @override
@@ -226,6 +311,18 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get catOrganizers => 'Organizéry';
+
+  @override
+  String get catCrochet => 'Háčkovanie';
+
+  @override
+  String get catSewing => 'Šitie';
+
+  @override
+  String get catKnitting => 'Pletenie';
+
+  @override
+  String get catJewelry => 'Šperky';
 
   @override
   String get condExcellent => 'Výborný';
@@ -334,4 +431,7 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get forStock => 'Na sklad';
+
+  @override
+  String get appVersion => 'Verzia';
 }

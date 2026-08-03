@@ -26,6 +26,17 @@ class _GuideScreenState extends State<GuideScreen> {
   final _dbService = DatabaseService();
   final _storageService = StorageService();
 
+  String _getLocalizedCategory(String category, AppLocalizations l10n) {
+    switch (category) {
+      case 'Háčkovanie': return l10n.catCrochet;
+      case 'Šitie': return l10n.catSewing;
+      case 'Pletenie': return l10n.catKnitting;
+      case 'Šperky': return l10n.catJewelry;
+      case 'Iné': return l10n.catOther;
+      default: return category;
+    }
+  }
+
   void _showDetailDialog(GuideModel guide) {
     final l10n = AppLocalizations.of(context)!;
 
@@ -39,11 +50,11 @@ class _GuideScreenState extends State<GuideScreen> {
         },
         onDelete: () => _dbService.deleteGuide(guide.id),
         children: [
-          DetailEntryDialog.buildDetailRow(Icons.category_outlined, l10n.category, guide.category),
+          DetailEntryDialog.buildDetailRow(Icons.category_outlined, l10n.category, _getLocalizedCategory(guide.category, l10n)),
           if (guide.note.isNotEmpty)
             DetailEntryDialog.buildDetailRow(Icons.notes_outlined, l10n.note, guide.note),
           if (guide.updatedAt != null)
-            DetailEntryDialog.buildDetailRow(Icons.history, 'Naposledy', DateFormat('dd.MM.yyyy HH:mm').format(guide.updatedAt!)),
+            DetailEntryDialog.buildDetailRow(Icons.history, l10n.lastUpdated, DateFormat('dd.MM.yyyy HH:mm').format(guide.updatedAt!)),
           const SizedBox(height: 16),
           ElevatedButton.icon(
             onPressed: () {
@@ -51,7 +62,7 @@ class _GuideScreenState extends State<GuideScreen> {
               _viewGuide(guide);
             },
             icon: Icon(guide.fileType == 'pdf' ? Icons.picture_as_pdf : Icons.image),
-            label: Text(guide.fileType == 'pdf' ? 'Otvoriť PDF návod' : 'Zobraziť fotku návodu'),
+            label: Text(guide.fileType == 'pdf' ? l10n.openPdfGuide : l10n.viewPhotoGuide),
             style: ElevatedButton.styleFrom(minimumSize: const Size(double.infinity, 45)),
           ),
         ],
@@ -84,7 +95,7 @@ class _GuideScreenState extends State<GuideScreen> {
       barrierDismissible: false,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AddEntryDialog(
-          title: guide == null ? '${l10n.add} návod' : '${l10n.edit} návod',
+          title: guide == null ? l10n.addGuide : l10n.editGuide,
           isSaving: isSaving,
           onSave: () async {
             if (titleController.text.isEmpty || (pickedFile == null && currentUrl == null)) return;
@@ -120,7 +131,12 @@ class _GuideScreenState extends State<GuideScreen> {
               DropdownButtonFormField<String>(
                 value: category,
                 decoration: InputDecoration(labelText: l10n.category),
-                items: ['Háčkovanie', 'Šitie', 'Pletenie', 'Šperky', 'Iné'].map((cat) => DropdownMenuItem(value: cat, child: Text(cat))).toList(),
+                items: ['Háčkovanie', 'Šitie', 'Pletenie', 'Šperky', 'Iné']
+                    .map((cat) => DropdownMenuItem(
+                          value: cat, 
+                          child: Text(_getLocalizedCategory(cat, l10n)),
+                        ))
+                    .toList(),
                 onChanged: (val) => category = val!,
               ),
               const SizedBox(height: 16),
@@ -132,7 +148,7 @@ class _GuideScreenState extends State<GuideScreen> {
                   }
                 },
                 icon: const Icon(Icons.attach_file),
-                label: Text(fileName ?? (currentUrl != null ? 'Zmeniť súbor' : 'Vybrať súbor (Foto/PDF)')),
+                label: Text(fileName ?? (currentUrl != null ? l10n.changeFile : l10n.selectFile)),
               ),
               const SizedBox(height: 16),
               TextField(controller: noteController, decoration: InputDecoration(labelText: l10n.note), maxLines: 2),
@@ -175,7 +191,7 @@ class _GuideScreenState extends State<GuideScreen> {
               return NestoryCard(
                 leading: Icon(guide.fileType == 'pdf' ? Icons.picture_as_pdf : Icons.image, color: AppColors.accent),
                 title: guide.title,
-                subtitle: Text(guide.category),
+                subtitle: Text(_getLocalizedCategory(guide.category, l10n)),
                 onTap: () => _showDetailDialog(guide),
               );
             },

@@ -182,11 +182,41 @@ abstract class AppLocalizations {
   /// **'Material'**
   String get material;
 
+  /// No description provided for @addMaterial.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Material'**
+  String get addMaterial;
+
+  /// No description provided for @editMaterial.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Material'**
+  String get editMaterial;
+
   /// No description provided for @tools.
   ///
   /// In en, this message translates to:
   /// **'Tools'**
   String get tools;
+
+  /// No description provided for @tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Tool'**
+  String get tool;
+
+  /// No description provided for @addTool.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Tool'**
+  String get addTool;
+
+  /// No description provided for @editTool.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Tool'**
+  String get editTool;
 
   /// No description provided for @inventory.
   ///
@@ -212,11 +242,71 @@ abstract class AppLocalizations {
   /// **'Projects'**
   String get projects;
 
+  /// No description provided for @project.
+  ///
+  /// In en, this message translates to:
+  /// **'Project'**
+  String get project;
+
+  /// No description provided for @addProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Project'**
+  String get addProject;
+
+  /// No description provided for @editProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Project'**
+  String get editProject;
+
   /// No description provided for @guides.
   ///
   /// In en, this message translates to:
   /// **'Guides'**
   String get guides;
+
+  /// No description provided for @guide.
+  ///
+  /// In en, this message translates to:
+  /// **'Guide'**
+  String get guide;
+
+  /// No description provided for @addGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Guide'**
+  String get addGuide;
+
+  /// No description provided for @editGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Guide'**
+  String get editGuide;
+
+  /// No description provided for @openPdfGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Open PDF Guide'**
+  String get openPdfGuide;
+
+  /// No description provided for @viewPhotoGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'View Photo Guide'**
+  String get viewPhotoGuide;
+
+  /// No description provided for @changeFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Change file'**
+  String get changeFile;
+
+  /// No description provided for @selectFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Select file (Photo/PDF)'**
+  String get selectFile;
 
   /// No description provided for @planner.
   ///
@@ -248,6 +338,12 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get profile;
 
+  /// No description provided for @premium.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get premium;
+
   /// No description provided for @premiumStatus.
   ///
   /// In en, this message translates to:
@@ -260,11 +356,83 @@ abstract class AppLocalizations {
   /// **'All features unlocked'**
   String get premiumActive;
 
+  /// No description provided for @premiumActiveDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your subscription is active.'**
+  String get premiumActiveDesc;
+
   /// No description provided for @getPremium.
   ///
   /// In en, this message translates to:
   /// **'Get Premium'**
   String get getPremium;
+
+  /// No description provided for @premiumBenefit.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock unlimited guides and stats.'**
+  String get premiumBenefit;
+
+  /// No description provided for @activateMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'ACTIVATE MONTHLY SUBSCRIPTION'**
+  String get activateMonthly;
+
+  /// No description provided for @restorePurchases.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get restorePurchases;
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @legal.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal'**
+  String get legal;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This will permanently delete your account and all your data. This action cannot be undone.'**
+  String get deleteAccountWarning;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password for confirmation'**
+  String get confirmPassword;
+
+  /// No description provided for @deleteAccountError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error deleting account. Check password.'**
+  String get deleteAccountError;
+
+  /// No description provided for @termsAndConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & Conditions'**
+  String get termsAndConditions;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
 
   /// No description provided for @logout.
   ///
@@ -320,6 +488,12 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
   /// No description provided for @name.
   ///
   /// In en, this message translates to:
@@ -361,6 +535,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Note'**
   String get note;
+
+  /// No description provided for @lastUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated'**
+  String get lastUpdated;
 
   /// No description provided for @noMaterial.
   ///
@@ -446,18 +626,6 @@ abstract class AppLocalizations {
   /// **'This will permanently delete your account and all your data. This action cannot be undone.'**
   String get deleteProfileWarning;
 
-  /// No description provided for @termsAndConditions.
-  ///
-  /// In en, this message translates to:
-  /// **'Terms & Conditions'**
-  String get termsAndConditions;
-
-  /// No description provided for @privacyPolicy.
-  ///
-  /// In en, this message translates to:
-  /// **'Privacy Policy'**
-  String get privacyPolicy;
-
   /// No description provided for @yes.
   ///
   /// In en, this message translates to:
@@ -523,6 +691,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Organizers'**
   String get catOrganizers;
+
+  /// No description provided for @catCrochet.
+  ///
+  /// In en, this message translates to:
+  /// **'Crochet'**
+  String get catCrochet;
+
+  /// No description provided for @catSewing.
+  ///
+  /// In en, this message translates to:
+  /// **'Sewing'**
+  String get catSewing;
+
+  /// No description provided for @catKnitting.
+  ///
+  /// In en, this message translates to:
+  /// **'Knitting'**
+  String get catKnitting;
+
+  /// No description provided for @catJewelry.
+  ///
+  /// In en, this message translates to:
+  /// **'Jewelry'**
+  String get catJewelry;
 
   /// No description provided for @condExcellent.
   ///
@@ -739,6 +931,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'For Stock'**
   String get forStock;
+
+  /// No description provided for @appVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get appVersion;
 }
 
 class _AppLocalizationsDelegate

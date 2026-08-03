@@ -47,7 +47,7 @@ class _ToolsScreenState extends State<ToolsScreen> {
           if (tool.note.isNotEmpty)
             DetailEntryDialog.buildDetailRow(Icons.notes_outlined, l10n.note, tool.note),
           if (tool.updatedAt != null)
-            DetailEntryDialog.buildDetailRow(Icons.history, 'Naposledy', DateFormat('dd.MM.yyyy HH:mm').format(tool.updatedAt!)),
+            DetailEntryDialog.buildDetailRow(Icons.history, l10n.lastUpdated, DateFormat('dd.MM.yyyy HH:mm').format(tool.updatedAt!)),
         ],
       ),
     );
@@ -65,7 +65,7 @@ class _ToolsScreenState extends State<ToolsScreen> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AddEntryDialog(
-          title: tool == null ? '${l10n.add} ${l10n.tools.toLowerCase()}' : '${l10n.edit} ${l10n.tools.toLowerCase()}',
+          title: tool == null ? l10n.addTool : l10n.editTool,
           onSave: () async {
             if (nameController.text.trim().isEmpty) return;
             final data = ToolModel(
