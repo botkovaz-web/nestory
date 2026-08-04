@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,6 +45,10 @@ void main() async {
 class NestoryApp extends StatelessWidget {
   const NestoryApp({super.key});
 
+  // Inicializácia Analytics
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
@@ -52,6 +57,9 @@ class NestoryApp extends StatelessWidget {
         return MaterialApp(
           title: 'NestyCraft',
           debugShowCheckedModeBanner: false,
+          
+          // Sledovanie navigácie pre Analytics
+          navigatorObservers: [observer],
           
           // Dynamické témy
           themeMode: currentMode, 
