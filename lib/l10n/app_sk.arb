@@ -177,5 +177,10 @@
   "onboarding4Desc": "Pripravuj sa na trhy, sleduj predaje a uvidíš, ako tvoj handmade biznis rastie vďaka detailným štatistikám.",
   "onboardingDone": "Začať tvoriť",
   "next": "Ďalej",
-  "skip": "Preskočiť"
+  "skip": "Preskočiť",
+  "addNewCategory": "Pridať novú...",
+  "newCategoryTitle": "Nová kategória",
+  "categoryNameHint": "Názov kategórie (napr. Zipsy)",
+  "overdue": "Zmeškané",
+  "daysLeft": "{count, plural, =1{ostáva 1 deň} few{ostávajú {count} dni} other{ostáva {count} dní}}"
 }

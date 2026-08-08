@@ -547,4 +547,28 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get skip => 'Preskočiť';
+
+  @override
+  String get addNewCategory => 'Pridať novú...';
+
+  @override
+  String get newCategoryTitle => 'Nová kategória';
+
+  @override
+  String get categoryNameHint => 'Názov kategórie (napr. Zipsy)';
+
+  @override
+  String get overdue => 'Zmeškané';
+
+  @override
+  String daysLeft(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'ostáva $count dní',
+      few: 'ostávajú $count dni',
+      one: 'ostáva 1 deň',
+    );
+    return '$_temp0';
+  }
 }

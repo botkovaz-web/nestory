@@ -138,7 +138,7 @@ class HomeScreen extends StatelessWidget {
                     return _buildActionCard(
                       context,
                       title: nextProject.name,
-                      subtitle: '${DateFormat('dd.MM.yyyy').format(nextProject.deadline!)} (${daysLeft < 0 ? 'Zmeškané' : 'Ostáva $daysLeft dní'})',
+                      subtitle: '${DateFormat('dd.MM.yyyy').format(nextProject.deadline!)} (${daysLeft < 0 ? l10n.overdue : l10n.daysLeft(daysLeft)})',
                       icon: Icons.timer_outlined,
                       color: daysLeft < 3 ? Colors.redAccent : Colors.blueAccent,
                       onTap: () => onNavigate(2),

@@ -54,57 +54,116 @@ class _MaterialScreenState extends State<MaterialScreen> {
     String category = material?.category ?? 'Priadze';
     String unit = material?.unit ?? 'ks';
 
+    final List<String> defaultCategories = ['Priadze', 'Korálky', 'Papiere', 'Látky', 'Iné'];
+
     showDialog(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AddEntryDialog(
-          title: material == null ? l10n.addMaterial : l10n.editMaterial,
-          onSave: () async {
-            if (nameController.text.trim().isEmpty) return;
-            final data = MaterialModel(
-              id: material?.id ?? '',
-              name: nameController.text.trim(),
-              category: category,
-              quantity: double.tryParse(quantityController.text) ?? 0,
-              unit: unit,
-              location: locationController.text.trim(),
-              note: noteController.text.trim(),
-            ).toMap();
+      builder: (context) => StreamBuilder<List<String>>(
+        stream: _dbService.customMaterialCategories,
+        builder: (context, snapshot) {
+          final List<String> allCategories = [...defaultCategories, ...(snapshot.data ?? [])];
+          if (!allCategories.contains(category)) allCategories.add(category);
 
-            material == null ? await _dbService.addMaterial(data) : await _dbService.updateMaterial(material.id, data);
-            if (mounted) Navigator.pop(context);
-          },
-          content: Column(
-            children: [
-              TextField(controller: nameController, decoration: InputDecoration(labelText: l10n.name)),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                value: category,
-                decoration: InputDecoration(labelText: l10n.category),
-                items: ['Priadze', 'Korálky', 'Papiere', 'Látky', 'Iné'].map((cat) => DropdownMenuItem(value: cat, child: Text(MaterialModel(id: '', name: '', category: cat, quantity: 0, unit: '', location: '').getLocalizedCategory(l10n)))).toList(),
-                onChanged: (val) => category = val!,
-              ),
-              const SizedBox(height: 16),
-              Row(
+          return StatefulBuilder(
+            builder: (context, setDialogState) => AddEntryDialog(
+              title: material == null ? l10n.addMaterial : l10n.editMaterial,
+              onSave: () async {
+                if (nameController.text.trim().isEmpty) return;
+                final data = MaterialModel(
+                  id: material?.id ?? '',
+                  name: nameController.text.trim(),
+                  category: category,
+                  quantity: double.tryParse(quantityController.text) ?? 0,
+                  unit: unit,
+                  location: locationController.text.trim(),
+                  note: noteController.text.trim(),
+                ).toMap();
+
+                material == null ? await _dbService.addMaterial(data) : await _dbService.updateMaterial(material.id, data);
+                if (mounted) Navigator.pop(context);
+              },
+              content: Column(
                 children: [
-                  Expanded(flex: 2, child: TextField(controller: quantityController, decoration: InputDecoration(labelText: l10n.quantity), keyboardType: const TextInputType.numberWithOptions(decimal: true))),
-                  const SizedBox(width: 16),
-                  Expanded(flex: 2, child: DropdownButtonFormField<String>(
+                  TextField(controller: nameController, decoration: InputDecoration(labelText: l10n.name)),
+                  const SizedBox(height: 16),
+                  DropdownButtonFormField<String>(
+                    value: category,
                     isExpanded: true,
-                    value: unit,
-                    decoration: InputDecoration(labelText: l10n.unit, contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8)),
-                    items: ['ks', 'g', 'kg', 'm', 'klbka', 'hárky', 'balenia'].map((u) => DropdownMenuItem(value: u, child: Text(MaterialModel(id: '', name: '', category: '', quantity: 0, unit: u, location: '').getLocalizedUnit(l10n), style: const TextStyle(fontSize: 14)))).toList(),
-                    onChanged: (val) => setDialogState(() => unit = val!),
-                  )),
+                    decoration: InputDecoration(labelText: l10n.category),
+                    items: [
+                      ...allCategories.map((cat) => DropdownMenuItem(
+                            value: cat,
+                            child: Text(MaterialModel(id: '', name: '', category: cat, quantity: 0, unit: '', location: '').getLocalizedCategory(l10n)),
+                          )),
+                      DropdownMenuItem(
+                        value: 'ADD_NEW_CAT',
+                        child: Row(
+                          children: [
+                            const Icon(Icons.add, size: 18, color: AppColors.accent),
+                            const SizedBox(width: 8),
+                            Text(l10n.addNewCategory, style: const TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ),
+                    ],
+                    onChanged: (val) async {
+                      if (val == 'ADD_NEW_CAT') {
+                        final newCat = await _showNewCategoryDialog(context);
+                        if (newCat != null && newCat.isNotEmpty) {
+                          await _dbService.addCustomMaterialCategory(newCat);
+                          setDialogState(() => category = newCat);
+                        }
+                      } else {
+                        setDialogState(() => category = val!);
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(flex: 2, child: TextField(controller: quantityController, decoration: InputDecoration(labelText: l10n.quantity), keyboardType: const TextInputType.numberWithOptions(decimal: true))),
+                      const SizedBox(width: 16),
+                      Expanded(flex: 2, child: DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        value: unit,
+                        decoration: InputDecoration(labelText: l10n.unit, contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8)),
+                        items: ['ks', 'g', 'kg', 'm', 'klbka', 'hárky', 'balenia'].map((u) => DropdownMenuItem(value: u, child: Text(MaterialModel(id: '', name: '', category: '', quantity: 0, unit: u, location: '').getLocalizedUnit(l10n), style: const TextStyle(fontSize: 14)))).toList(),
+                        onChanged: (val) => setDialogState(() => unit = val!),
+                      )),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(controller: locationController, decoration: InputDecoration(labelText: l10n.location)),
+                  const SizedBox(height: 16),
+                  TextField(controller: noteController, decoration: InputDecoration(labelText: l10n.note), maxLines: 2),
                 ],
               ),
-              const SizedBox(height: 16),
-              TextField(controller: locationController, decoration: InputDecoration(labelText: l10n.location)),
-              const SizedBox(height: 16),
-              TextField(controller: noteController, decoration: InputDecoration(labelText: l10n.note), maxLines: 2),
-            ],
-          ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Future<String?> _showNewCategoryDialog(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    String? newCategory;
+    return showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.newCategoryTitle),
+        content: TextField(
+          autofocus: true,
+          decoration: InputDecoration(hintText: l10n.categoryNameHint),
+          onChanged: (val) => newCategory = val,
         ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, newCategory),
+            child: Text(l10n.add),
+          ),
+        ],
       ),
     );
   }

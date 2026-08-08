@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'app_colors.dart';
 
 class AppTheme {
@@ -21,6 +22,7 @@ class AppTheme {
         centerTitle: false,
         titleTextStyle: TextStyle(color: Colors.black87, fontSize: 20, fontWeight: FontWeight.bold),
         iconTheme: IconThemeData(color: Colors.black87),
+        systemOverlayStyle: SystemUiOverlayStyle.dark, // Čierne ikony (WiFi, batéria, čas)
       ),
       cardTheme: CardThemeData(
         color: AppColors.surfaceLight,
@@ -83,6 +85,7 @@ class AppTheme {
         centerTitle: false,
         titleTextStyle: TextStyle(color: AppColors.textDark, fontSize: 20, fontWeight: FontWeight.bold),
         iconTheme: IconThemeData(color: AppColors.textDark),
+        systemOverlayStyle: SystemUiOverlayStyle.light, // Biele ikony (WiFi, batéria, čas)
       ),
       cardTheme: CardThemeData(
         color: AppColors.surfaceDark,

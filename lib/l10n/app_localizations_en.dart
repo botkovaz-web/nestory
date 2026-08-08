@@ -551,4 +551,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get skip => 'Skip';
+
+  @override
+  String get addNewCategory => 'Add new...';
+
+  @override
+  String get newCategoryTitle => 'New Category';
+
+  @override
+  String get categoryNameHint => 'Category name (e.g. Zippers)';
+
+  @override
+  String get overdue => 'Overdue';
+
+  @override
+  String daysLeft(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days left',
+      one: '1 day left',
+    );
+    return '$_temp0';
+  }
 }

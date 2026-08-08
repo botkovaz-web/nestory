@@ -55,6 +55,17 @@ class DatabaseService {
   Future<void> updateMaterial(String id, Map<String, dynamic> data) async => await userDoc.collection('materials').doc(id).update(data);
   Future<void> deleteMaterial(String id) async => await userDoc.collection('materials').doc(id).delete();
 
+  // Vlastné kategórie materiálu
+  Stream<List<String>> get customMaterialCategories {
+    return userDoc.collection('material_categories')
+      .snapshots()
+      .map((snap) => snap.docs.map((doc) => doc.data()['name'] as String).toList());
+  }
+
+  Future<void> addCustomMaterialCategory(String name) async {
+    await userDoc.collection('material_categories').add({'name': name});
+  }
+
   Stream<List<ToolModel>> get tools {
     return userDoc.collection('tools')
       .orderBy('updatedAt', descending: true)

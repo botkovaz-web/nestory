@@ -176,5 +176,10 @@
   "onboarding4Desc": "Prepare for markets, track sales and see your handmade business grow thanks to detailed statistics.",
   "onboardingDone": "Start creating",
   "next": "Next",
-  "skip": "Skip"
+  "skip": "Skip",
+  "addNewCategory": "Add new...",
+  "newCategoryTitle": "New Category",
+  "categoryNameHint": "Category name (e.g. Zippers)",
+  "overdue": "Overdue",
+  "daysLeft": "{count, plural, =1{1 day left} other{{count} days left}}"
 }
